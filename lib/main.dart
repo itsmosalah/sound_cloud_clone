@@ -1,7 +1,20 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  //runApp(const MyApp());
+  Dio _dio = Dio();
+  //                                      base address            endpoint  query parameters, which we can pass as a string to the function and process anything we want
+  Response res = await _dio.get("https://spotify23.p.rapidapi.com/search/?q=%3CREQUIRED%3E&type=multi&offset=0&limit=10&numberOfTopResults=5" ,
+    options: Options(
+    headers: {
+      'X-RapidAPI-Key' : "ecd058c83cmsh153109f65a006a2p18cbd8jsn937e9f50b68e",
+      'X-RapidAPI-Host': 'spotify23.p.rapidapi.com',
+    },
+  ),);
+  print(res.data.toString());
 }
 
 class MyApp extends StatelessWidget {
