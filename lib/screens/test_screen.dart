@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:just_audio/just_audio.dart';
+import '../models/music_player.dart';
 
 
 class TestScreen extends StatelessWidget {
@@ -16,11 +16,14 @@ class TestScreen extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ElevatedButton(
               onPressed: ()async{
                 String url = "https://p.scdn.co/mp3-preview/315b151078df729934712ed1cc21e11506c64017?cid=f6a40776580943a7bc5173125a1e8832";
+
+                MusicPlayer player = MusicPlayer();
+                player.setUrlSrc(url);
+                player.play();
                 /*var _audioPlayer = AudioPlayer();
                 await _audioPlayer.setUrl(url);
                 await _audioPlayer.play();*/
