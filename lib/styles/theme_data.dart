@@ -37,7 +37,7 @@ ThemeData DarkMode = ThemeData(
     subtitle2: TextStyle(color: Colors.white, fontSize: 20),
     // For Headers
     headline1: TextStyle(
-        fontSize: 35.0,
+        fontSize: 25.0,
         fontWeight: FontWeight.bold,
         color: Colors.white,
         letterSpacing: 1.4),
@@ -69,7 +69,7 @@ ThemeData DarkMode = ThemeData(
 );
 
 ThemeData LightMode = ThemeData(
-  fontFamily: 'Jannah',
+  // fontFamily: 'Jannah',
   appBarTheme: AppBarTheme(
     // titleSpacing: 20.0,
       backgroundColor: Colors.white,
@@ -92,7 +92,7 @@ ThemeData LightMode = ThemeData(
   textTheme: TextTheme(
     // For Headers
     headline1: const TextStyle(
-        fontSize: 38.0,
+        fontSize: 25.0,
         fontWeight: FontWeight.bold,
         color: Colors.black,
         letterSpacing: 1.4),

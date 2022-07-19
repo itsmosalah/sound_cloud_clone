@@ -1,16 +1,28 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sound_cloud_clone/cubits/bottom_nav/cubit.dart';
 import 'package:sound_cloud_clone/cubits/login&Register/cubit.dart';
 import 'package:sound_cloud_clone/cubits/music_manager/cubit.dart';
+import 'package:sound_cloud_clone/cubits/theme_manager/cubit.dart';
+import 'package:sound_cloud_clone/cubits/theme_manager/states.dart';
 import 'package:sound_cloud_clone/screens/home_screen.dart';
+import 'package:sound_cloud_clone/screens/login_screen.dart';
+import 'package:sound_cloud_clone/screens/register_screen.dart';
+import 'package:sound_cloud_clone/styles/theme_data.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  // to delete Collection
 
-
+  // var collection = FirebaseFirestore.instance.collection('users');
+  // var snapshots = await collection.get();
+  // for (var doc in snapshots.docs) {
+  //   await doc.reference.delete();
+  // }
 
   runApp(const MyApp());
 
@@ -29,39 +41,50 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return MultiBlocProvider(
-
-      providers: [
-        BlocProvider(create: (BuildContext context) => SoundCloudLoginAndRegCubit(),),
-        BlocProvider(create: (BuildContext context) => SoundCloudMusicManagerCubit(),)
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        // home: LoginScreen(),
-        // home: HomeScreen(),
-        home:(
-            AnimatedSplashScreen(
-                backgroundColor:Colors.black54,
-                splash:splash(),
-                nextScreen: HomeScreen(),
-            )
-        ),
-      )
-    );
+        providers: [
+          BlocProvider(
+            create: (BuildContext context) => SoundCloudLoginAndRegCubit(),
+          ),
+          BlocProvider(
+            create: (BuildContext context) => SoundCloudMusicManagerCubit(),
+          ),
+          BlocProvider(
+            create: (BuildContext context) => BottomNavCubit(),
+          ),
+          BlocProvider(
+            create: (BuildContext context) => ThemeManagerCubit(),
+          ),
+        ],
+        child: BlocConsumer<ThemeManagerCubit, ThemeManagerStates>(
+          listener: (context, state) {},
+          builder: (context, state) => MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: LightMode,
+            darkTheme: DarkMode,
+            themeMode: ThemeManagerCubit.get(context).isDark
+                ? ThemeMode.dark
+                : ThemeMode.light,
+            home: LoginScreen(),
+            // home: HomeScreen(),
+            // home: (AnimatedSplashScreen(
+            //   backgroundColor: Colors.black54,
+            //   splash: splash(),
+            //   nextScreen:
+            //   LoginScreen(),
+            // )),
+          ),
+        ));
   }
 }
 
-Widget splash(){
+Widget splash() {
   return Expanded(
     child: Column(
       children: const [
         Text(
           "Sound Cloud Clone",
-          style: TextStyle(
-              color:Colors.deepOrange,
-              fontSize:39
-          ),
+          style: TextStyle(color: Colors.deepOrange, fontSize: 39),
         ),
         Icon(
           Icons.music_note,
@@ -73,4 +96,3 @@ Widget splash(){
   );
   //Image.asset();
 }
-

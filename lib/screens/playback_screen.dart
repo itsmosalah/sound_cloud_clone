@@ -20,7 +20,7 @@ class PlaybackScreen extends StatelessWidget {
           title: defaultText(
               text: 'Now Playing',
               textColor: Colors.white,
-              fontsize: 28,
+              fontsize: 25,
               letterSpacing: 2
           ),
         ),

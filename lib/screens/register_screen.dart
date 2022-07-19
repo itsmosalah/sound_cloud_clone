@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +7,7 @@ import 'package:sound_cloud_clone/components/components.dart';
 import 'package:sound_cloud_clone/cubits/login&Register/cubit.dart';
 import 'package:sound_cloud_clone/cubits/login&Register/states.dart';
 
+import '../models/user_data.dart';
 import 'login_screen.dart';
 
 class RegisterScreen extends StatelessWidget {
@@ -32,6 +34,7 @@ class RegisterScreen extends StatelessWidget {
         }
       },
       builder: (context, state) {
+
         return Scaffold(
           body: Center(
             child: SingleChildScrollView(
@@ -132,8 +135,7 @@ class RegisterScreen extends StatelessWidget {
                             text: 'Login',
                             fn: () {
                               navigateTo(context, LoginScreen());
-                            },
-                            textColor: Colors.blue)
+                            },)
                       ],
                     ),
                   ],

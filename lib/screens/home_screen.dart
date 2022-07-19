@@ -1,8 +1,9 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sound_cloud_clone/components/components.dart';
+import 'package:sound_cloud_clone/cubits/bottom_nav/cubit.dart';
+import 'package:sound_cloud_clone/cubits/bottom_nav/states.dart';
 import 'package:sound_cloud_clone/models/music_player.dart';
 import 'package:sound_cloud_clone/screens/playback_screen.dart';
 import 'package:sound_cloud_clone/shared/network/remote/sound_api.dart';
@@ -18,60 +19,25 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
-
-    return BlocConsumer<SoundCloudMusicManagerCubit,SoundCloudMusicManagerStates>(
-      builder: (BuildContext context, state){
-        var cubit = SoundCloudMusicManagerCubit.get(context);
-        // cubit.setTrackList();
-        cubit.setNowPlaying();
-
-
+    var cubit = BottomNavCubit.get(context);
+    return BlocConsumer<BottomNavCubit, BottomNavStates>(
+      listener: (context, state) {},
+      builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(
-            title: defaultText(text: "SoundCloud", fontsize: 25),
-            centerTitle: true,
-            backgroundColor: Colors.deepOrange,
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(45.0),
-            child: Column(
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: 100,
-                  child: Row(
-                    children:
-                    [
-                      Image(image: NetworkImage(cubit.nowPlaying.image64URL),),
-                      SizedBox(width: 10,),
-                      Column(
-                        children:
-                        [
-                          defaultText(text: cubit.nowPlaying.name),
-                          SizedBox(height: 5,),
-                          defaultText(text: cubit.nowPlaying.artistName),
-                        ],
-                      ),
-                      Spacer(),
-                      IconButton(onPressed: () {
-                          /*MusicPlayer mp = MusicPlayer();
-                          mp.setUrlSrc(cubit.nowPlaying.previewURL);
-                          mp.play();*/
-
-
-                        navigateTo(context, PlaybackScreen());
-                      }, icon: Icon(Icons.play_arrow))
-                    ],
-                  ),
-                ),
-              ],
-            ),
+          body: cubit.bottomNavScreens[cubit.currentIndex],
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: cubit.currentIndex,
+            onTap: (int index) {
+              cubit.changeBottomNavScreen(index);
+            },
+            items: [
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.settings), label: "Settings"),
+            ],
           ),
         );
       },
-      listener: (BuildContext context, Object? state) {  },
     );
   }
 }
