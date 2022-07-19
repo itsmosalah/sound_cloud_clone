@@ -13,3 +13,5 @@ class SoundCloudRegisterErrorState extends SoundCloudLoginAndRegStates{}
 class SoundCloudCreateUserLoadingState extends SoundCloudLoginAndRegStates{}
 class SoundCloudCreateUserSuccessState extends SoundCloudLoginAndRegStates{}
 class SoundCloudCreateUserErrorState extends SoundCloudLoginAndRegStates{}
+class SoundCloudNowPlayingState extends SoundCloudLoginAndRegStates{}
+class SoundCloudLoadingState extends SoundCloudLoginAndRegStates{}

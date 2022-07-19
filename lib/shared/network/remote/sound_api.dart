@@ -1,27 +1,56 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
+import '../../../models/track_data.dart';
 
 class SoundAPI {
+
+  Map<String,dynamic> headerValues = {
+    'X-RapidAPI-Key' : "ecd058c83cmsh153109f65a006a2p18cbd8jsn937e9f50b68e",
+    'X-RapidAPI-Host': 'spotify23.p.rapidapi.com',
+  };
 
   var _dio;
 
   SoundAPI() {
     _dio = Dio();
   }
-
-  //for testing use
-  // getResponse("search", "q=%3CREQUIRED%3E&type=multi&offset=0&limit=10&numberOfTopResults=5");
-
-
-  Future<String> getResponse(String endPoint, String queryParams) async {
+  /*Future<String> getResponse(String endPoint, String queryParams) async {
     //                                      base address
     Response res = await _dio.get("https://spotify23.p.rapidapi.com/$endPoint/?$queryParams" ,
       options: Options(
-        headers: {
-          'X-RapidAPI-Key' : "ecd058c83cmsh153109f65a006a2p18cbd8jsn937e9f50b68e",
-          'X-RapidAPI-Host': 'spotify23.p.rapidapi.com',
-        },
+        headers: headerValues
       ),);
     return res.data.toString();
   }
+*/
 
+  Future<TrackDataPlayback> getTrack(String trackID) async {
+
+
+    //API request
+    /*String url = "https://spotify23.p.rapidapi.com/tracks/?ids=$trackID";
+    Response res = await _dio.get( url ,
+      options: Options(
+        headers: headerValues,
+      ),);
+    String getTrackResponse = res.data.toString();
+*/
+
+    //for dummy testing wallahi
+    String getTrackResponse = "{\"tracks\":[{\"album\":{\"album_type\":\"album\",\"artists\":[{\"external_urls\":{\"spotify\":\"https://open.spotify.com/artist/2zwHaEmXxX6DTv4i8ajNCM\"},\"id\":\"2zwHaEmXxX6DTv4i8ajNCM\",\"name\":\"KrisAllen\",\"type\":\"artist\",\"uri\":\"spotify:artist:2zwHaEmXxX6DTv4i8ajNCM\"}],\"external_urls\":{\"spotify\":\"https://open.spotify.com/album/4K3AXbUoyTVE4A6wV50cmB\"},\"id\":\"4K3AXbUoyTVE4A6wV50cmB\",\"images\":[{\"height\":640,\"url\":\"https://i.scdn.co/image/ab67616d0000b2735f3afe4cafb7a274497341b3\",\"width\":640},{\"height\":300,\"url\":\"https://i.scdn.co/image/ab67616d00001e025f3afe4cafb7a274497341b3\",\"width\":300},{\"height\":64,\"url\":\"https://i.scdn.co/image/ab67616d000048515f3afe4cafb7a274497341b3\",\"width\":64}],\"name\":\"Horizons\",\"release_date\":\"2014-08-12\",\"release_date_precision\":\"day\",\"total_tracks\":10,\"type\":\"album\",\"uri\":\"spotify:album:4K3AXbUoyTVE4A6wV50cmB\"},\"artists\":[{\"external_urls\":{\"spotify\":\"https://open.spotify.com/artist/2zwHaEmXxX6DTv4i8ajNCM\"},\"id\":\"2zwHaEmXxX6DTv4i8ajNCM\",\"name\":\"KrisAllen\",\"type\":\"artist\",\"uri\":\"spotify:artist:2zwHaEmXxX6DTv4i8ajNCM\"}],\"disc_number\":1,\"duration_ms\":198386,\"explicit\":false,\"external_ids\":{\"isrc\":\"QMF921450124\"},\"external_urls\":{\"spotify\":\"https://open.spotify.com/track/3nBmy2hAqIDmMOD0VZGB7I\"},\"id\":\"3nBmy2hAqIDmMOD0VZGB7I\",\"is_local\":false,\"is_playable\":true,\"name\":\"Lost\",\"popularity\":45,\"preview_url\":\"https://p.scdn.co/mp3-preview/6574de68d560b54a86d76b56ea5a414241627106?cid=f6a40776580943a7bc5173125a1e8832\",\"track_number\":5,\"type\":\"track\",\"uri\":\"spotify:track:3nBmy2hAqIDmMOD0VZGB7I\"}]}";
+    Map<String,dynamic> data = await json.decode(getTrackResponse);
+
+
+    return TrackDataPlayback.fromJson(data);
+  }
+
+
+  Future<Map<String,dynamic>> getSearchResults(String searchQuery) async {
+    //for dummy testing wallahi
+    String responseSearch = "{\"albums\":{\"totalCount\":1,\"items\":[{\"data\":{\"uri\":\"spotify:album:6OTLK9EtAVG0gvoVM0wxCc\",\"name\":\"Lost(AcousticTapes)\",\"artists\":{\"items\":[{\"uri\":\"spotify:artist:2zwHaEmXxX6DTv4i8ajNCM\",\"profile\":{\"name\":\"KrisAllen\"}}]},\"coverArt\":{\"sources\":[{\"url\":\"https://i.scdn.co/image/ab67616d00001e0279f338f18b334f417ea6e9d1\",\"width\":300,\"height\":300},{\"url\":\"https://i.scdn.co/image/ab67616d0000485179f338f18b334f417ea6e9d1\",\"width\":64,\"height\":64},{\"url\":\"https://i.scdn.co/image/ab67616d0000b27379f338f18b334f417ea6e9d1\",\"width\":640,\"height\":640}]},\"date\":{\"year\":2017}}}]},\"artists\":{\"totalCount\":0,\"items\":[]},\"episodes\":{\"totalCount\":0,\"items\":[]},\"genres\":{\"totalCount\":0,\"items\":[]},\"playlists\":{\"totalCount\":0,\"items\":[]},\"podcasts\":{\"totalCount\":2,\"items\":[{\"data\":{\"uri\":\"spotify:show:7wHtPCzfp82i4GKobdR5VF\",\"name\":\"NiceGuys-DerFilmpodcast\",\"coverArt\":{\"sources\":[{\"url\":\"https://i.scdn.co/image/ab6765630000f68d8fa3b61bf341167ec202d9f9\",\"width\":64,\"height\":64},{\"url\":\"https://i.scdn.co/image/ab67656300005f1f8fa3b61bf341167ec202d9f9\",\"width\":300,\"height\":300},{\"url\":\"https://i.scdn.co/image/ab6765630000ba8a8fa3b61bf341167ec202d9f9\",\"width\":640,\"height\":640}]},\"type\":\"PODCAST\",\"publisher\":{\"name\":\"morphsmediastudio\"},\"mediaType\":\"AUDIO\"}},{\"data\":{\"uri\":\"spotify:show:6L7PYadXH7u93APmZ8RiCB\",\"name\":\"DieMachtderSocialMedia\",\"coverArt\":{\"sources\":[{\"url\":\"https://i.scdn.co/image/ab6765630000f68d85103336ad43817a58bde0e3\",\"width\":64,\"height\":64},{\"url\":\"https://i.scdn.co/image/ab67656300005f1f85103336ad43817a58bde0e3\",\"width\":300,\"height\":300},{\"url\":\"https://i.scdn.co/image/ab6765630000ba8a85103336ad43817a58bde0e3\",\"width\":640,\"height\":640}]},\"type\":\"PODCAST\",\"publisher\":{\"name\":\"KatharinaJulianeKull\"},\"mediaType\":\"AUDIO\"}}]},\"topResults\":{\"items\":[{\"data\":{\"uri\":\"spotify:track:3nBmy2hAqIDmMOD0VZGB7I\",\"id\":\"3nBmy2hAqIDmMOD0VZGB7I\",\"name\":\"Lost\",\"albumOfTrack\":{\"uri\":\"spotify:album:4K3AXbUoyTVE4A6wV50cmB\",\"name\":\"Horizons\",\"coverArt\":{\"sources\":[{\"url\":\"https://i.scdn.co/image/ab67616d00001e025f3afe4cafb7a274497341b3\",\"width\":300,\"height\":300},{\"url\":\"https://i.scdn.co/image/ab67616d000048515f3afe4cafb7a274497341b3\",\"width\":64,\"height\":64},{\"url\":\"https://i.scdn.co/image/ab67616d0000b2735f3afe4cafb7a274497341b3\",\"width\":640,\"height\":640}]},\"id\":\"4K3AXbUoyTVE4A6wV50cmB\",\"sharingInfo\":{\"shareUrl\":\"https://open.spotify.com/album/4K3AXbUoyTVE4A6wV50cmB?si=xMkX7gQGRoOUPbltbua0yA\"}},\"artists\":{\"items\":[{\"uri\":\"spotify:artist:2zwHaEmXxX6DTv4i8ajNCM\",\"profile\":{\"name\":\"KrisAllen\"}}]},\"contentRating\":{\"label\":\"NONE\"},\"duration\":{\"totalMilliseconds\":198386},\"playability\":{\"playable\":true}}},{\"data\":{\"uri\":\"spotify:album:6OTLK9EtAVG0gvoVM0wxCc\",\"name\":\"Lost(AcousticTapes)\",\"artists\":{\"items\":[{\"uri\":\"spotify:artist:2zwHaEmXxX6DTv4i8ajNCM\",\"profile\":{\"name\":\"KrisAllen\"}}]},\"coverArt\":{\"sources\":[{\"url\":\"https://i.scdn.co/image/ab67616d00001e0279f338f18b334f417ea6e9d1\",\"width\":300,\"height\":300},{\"url\":\"https://i.scdn.co/image/ab67616d0000485179f338f18b334f417ea6e9d1\",\"width\":64,\"height\":64},{\"url\":\"https://i.scdn.co/image/ab67616d0000b27379f338f18b334f417ea6e9d1\",\"width\":640,\"height\":640}]},\"date\":{\"year\":2017}}},{\"data\":{\"uri\":\"spotify:show:7wHtPCzfp82i4GKobdR5VF\",\"name\":\"NiceGuys-DerFilmpodcast\",\"coverArt\":{\"sources\":[{\"url\":\"https://i.scdn.co/image/ab6765630000f68d8fa3b61bf341167ec202d9f9\",\"width\":64,\"height\":64},{\"url\":\"https://i.scdn.co/image/ab67656300005f1f8fa3b61bf341167ec202d9f9\",\"width\":300,\"height\":300},{\"url\":\"https://i.scdn.co/image/ab6765630000ba8a8fa3b61bf341167ec202d9f9\",\"width\":640,\"height\":640}]},\"type\":\"PODCAST\",\"publisher\":{\"name\":\"morphsmediastudio\"},\"mediaType\":\"AUDIO\"}},{\"data\":{\"uri\":\"spotify:track:2lbqmXGyzSPsDRYBFslEIg\",\"id\":\"2lbqmXGyzSPsDRYBFslEIg\",\"name\":\"Lost(AcousticTapes)\",\"albumOfTrack\":{\"uri\":\"spotify:album:6OTLK9EtAVG0gvoVM0wxCc\",\"name\":\"Lost(AcousticTapes)\",\"coverArt\":{\"sources\":[{\"url\":\"https://i.scdn.co/image/ab67616d00001e0279f338f18b334f417ea6e9d1\",\"width\":300,\"height\":300},{\"url\":\"https://i.scdn.co/image/ab67616d0000485179f338f18b334f417ea6e9d1\",\"width\":64,\"height\":64},{\"url\":\"https://i.scdn.co/image/ab67616d0000b27379f338f18b334f417ea6e9d1\",\"width\":640,\"height\":640}]},\"id\":\"6OTLK9EtAVG0gvoVM0wxCc\",\"sharingInfo\":{\"shareUrl\":\"https://open.spotify.com/album/6OTLK9EtAVG0gvoVM0wxCc?si=oCYSzuUqQRGBh7GP6ic4fA\"}},\"artists\":{\"items\":[{\"uri\":\"spotify:artist:2zwHaEmXxX6DTv4i8ajNCM\",\"profile\":{\"name\":\"KrisAllen\"}}]},\"contentRating\":{\"label\":\"NONE\"},\"duration\":{\"totalMilliseconds\":209223},\"playability\":{\"playable\":true}}},{\"data\":{\"uri\":\"spotify:show:6L7PYadXH7u93APmZ8RiCB\",\"name\":\"DieMachtderSocialMedia\",\"coverArt\":{\"sources\":[{\"url\":\"https://i.scdn.co/image/ab6765630000f68d85103336ad43817a58bde0e3\",\"width\":64,\"height\":64},{\"url\":\"https://i.scdn.co/image/ab67656300005f1f85103336ad43817a58bde0e3\",\"width\":300,\"height\":300},{\"url\":\"https://i.scdn.co/image/ab6765630000ba8a85103336ad43817a58bde0e3\",\"width\":640,\"height\":640}]},\"type\":\"PODCAST\",\"publisher\":{\"name\":\"KatharinaJulianeKull\"},\"mediaType\":\"AUDIO\"}}],\"featured\":[]},\"tracks\":{\"totalCount\":4,\"items\":[{\"data\":{\"uri\":\"spotify:track:3nBmy2hAqIDmMOD0VZGB7I\",\"id\":\"3nBmy2hAqIDmMOD0VZGB7I\",\"name\":\"Lost\",\"albumOfTrack\":{\"uri\":\"spotify:album:4K3AXbUoyTVE4A6wV50cmB\",\"name\":\"Horizons\",\"coverArt\":{\"sources\":[{\"url\":\"https://i.scdn.co/image/ab67616d00001e025f3afe4cafb7a274497341b3\",\"width\":300,\"height\":300},{\"url\":\"https://i.scdn.co/image/ab67616d000048515f3afe4cafb7a274497341b3\",\"width\":64,\"height\":64},{\"url\":\"https://i.scdn.co/image/ab67616d0000b2735f3afe4cafb7a274497341b3\",\"width\":640,\"height\":640}]},\"id\":\"4K3AXbUoyTVE4A6wV50cmB\",\"sharingInfo\":{\"shareUrl\":\"https://open.spotify.com/album/4K3AXbUoyTVE4A6wV50cmB?si=lm5WM5jnTsWuIFYrYQgk7A\"}},\"artists\":{\"items\":[{\"uri\":\"spotify:artist:2zwHaEmXxX6DTv4i8ajNCM\",\"profile\":{\"name\":\"KrisAllen\"}}]},\"contentRating\":{\"label\":\"NONE\"},\"duration\":{\"totalMilliseconds\":198386},\"playability\":{\"playable\":true}}},{\"data\":{\"uri\":\"spotify:track:2lbqmXGyzSPsDRYBFslEIg\",\"id\":\"2lbqmXGyzSPsDRYBFslEIg\",\"name\":\"Lost(AcousticTapes)\",\"albumOfTrack\":{\"uri\":\"spotify:album:6OTLK9EtAVG0gvoVM0wxCc\",\"name\":\"Lost(AcousticTapes)\",\"coverArt\":{\"sources\":[{\"url\":\"https://i.scdn.co/image/ab67616d00001e0279f338f18b334f417ea6e9d1\",\"width\":300,\"height\":300},{\"url\":\"https://i.scdn.co/image/ab67616d0000485179f338f18b334f417ea6e9d1\",\"width\":64,\"height\":64},{\"url\":\"https://i.scdn.co/image/ab67616d0000b27379f338f18b334f417ea6e9d1\",\"width\":640,\"height\":640}]},\"id\":\"6OTLK9EtAVG0gvoVM0wxCc\",\"sharingInfo\":{\"shareUrl\":\"https://open.spotify.com/album/6OTLK9EtAVG0gvoVM0wxCc?si=-Uah48GHRDy02FhfrY-cMg\"}},\"artists\":{\"items\":[{\"uri\":\"spotify:artist:2zwHaEmXxX6DTv4i8ajNCM\",\"profile\":{\"name\":\"KrisAllen\"}}]},\"contentRating\":{\"label\":\"NONE\"},\"duration\":{\"totalMilliseconds\":209223},\"playability\":{\"playable\":true}}},{\"data\":{\"uri\":\"spotify:track:6l58ag6RlOpmeIFhvl2BTC\",\"id\":\"6l58ag6RlOpmeIFhvl2BTC\",\"name\":\"TransKaroo(AllenWattsRemix)-ContinuousMixVersion\",\"albumOfTrack\":{\"uri\":\"spotify:album:5uYQp6WrosPNCnJjjkFofV\",\"name\":\"SolarstonepresentsPureTrance7MixedByKristinaSky,Solarstone&Lostly\",\"coverArt\":{\"sources\":[{\"url\":\"https://i.scdn.co/image/ab67616d00001e027d5615bddc7b4d4281787540\",\"width\":300,\"height\":300},{\"url\":\"https://i.scdn.co/image/ab67616d000048517d5615bddc7b4d4281787540\",\"width\":64,\"height\":64},{\"url\":\"https://i.scdn.co/image/ab67616d0000b2737d5615bddc7b4d4281787540\",\"width\":640,\"height\":640}]},\"id\":\"5uYQp6WrosPNCnJjjkFofV\",\"sharingInfo\":{\"shareUrl\":\"https://open.spotify.com/album/5uYQp6WrosPNCnJjjkFofV?si=JZ0a_aYTTeawhpzlEJL8_A\"}},\"artists\":{\"items\":[{\"uri\":\"spotify:artist:39YXQGcflynecg2L3APfqf\",\"profile\":{\"name\":\"Lostly\"}},{\"uri\":\"spotify:artist:04FzGJxkYQ7zIRoCLQzLqR\",\"profile\":{\"name\":\"AllenWatts\"}}]},\"contentRating\":{\"label\":\"NONE\"},\"duration\":{\"totalMilliseconds\":260573},\"playability\":{\"playable\":true}}},{\"data\":{\"uri\":\"spotify:track:2q2Wkao79WYkcozSVL2prz\",\"id\":\"2q2Wkao79WYkcozSVL2prz\",\"name\":\"FalseMemory-ContinuousMixVersion\",\"albumOfTrack\":{\"uri\":\"spotify:album:5uYQp6WrosPNCnJjjkFofV\",\"name\":\"SolarstonepresentsPureTrance7MixedByKristinaSky,Solarstone&Lostly\",\"coverArt\":{\"sources\":[{\"url\":\"https://i.scdn.co/image/ab67616d00001e027d5615bddc7b4d4281787540\",\"width\":300,\"height\":300},{\"url\":\"https://i.scdn.co/image/ab67616d000048517d5615bddc7b4d4281787540\",\"width\":64,\"height\":64},{\"url\":\"https://i.scdn.co/image/ab67616d0000b2737d5615bddc7b4d4281787540\",\"width\":640,\"height\":640}]},\"id\":\"5uYQp6WrosPNCnJjjkFofV\",\"sharingInfo\":{\"shareUrl\":\"https://open.spotify.com/album/5uYQp6WrosPNCnJjjkFofV?si=JZ0a_aYTTeawhpzlEJL8_A\"}},\"artists\":{\"items\":[{\"uri\":\"spotify:artist:3EnKgv4XNOAoLkZaeV12H3\",\"profile\":{\"name\":\"Allende\"}}]},\"contentRating\":{\"label\":\"NONE\"},\"duration\":{\"totalMilliseconds\":279400},\"playability\":{\"playable\":true}}}]},\"users\":{\"totalCount\":0,\"items\":[]}}";
+    Map<String,dynamic> data = await json.decode(responseSearch);
+
+    return data;
+  }
 }

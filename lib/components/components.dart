@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../models/track_data.dart';
+
 void navigateTo(context, nextPage) => Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => nextPage),
@@ -63,6 +65,7 @@ Widget defaultTextField({
 Widget defaultText(
         {required String text,
         double? fontsize,
+          double? letterSpacing,
         isUpperCase = false,
         textColor,
         double? textHeight,linesMax,TextOverflow? textOverflow,FontStyle? fontStyle,TextStyle? hintStyle,TextAlign? textAlign}) =>
@@ -73,7 +76,9 @@ Widget defaultText(
       textAlign: textAlign,
       style:
           TextStyle(fontSize: fontsize, color: textColor, height: textHeight,
-          fontStyle: fontStyle,),
+          fontStyle: fontStyle,
+          letterSpacing: letterSpacing
+          ),
     );
 
 Widget defaultTextButton(
@@ -137,4 +142,20 @@ Widget myDivider() => Container(
       color: Colors.grey,
       height: 1,
     );
+
+//track tile. or make a list of tracks
+Widget trackTile(TrackData trackData){
+  return ListTile(
+    leading: CircleAvatar(
+      backgroundImage: NetworkImage(trackData.image64URL),
+    ),
+    title: Text(trackData.name),
+    trailing: const Icon(Icons.add),
+    onTap: (){
+      //navigate to the music player page with this trackData object
+      //might want to assign it to some "nowPlaying" variable in bloc?
+    },
+  );
+}
+
 

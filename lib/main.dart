@@ -1,8 +1,10 @@
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sound_cloud_clone/cubits/login&Register/cubit.dart';
-import 'package:sound_cloud_clone/screens/login_screen.dart';
+import 'package:sound_cloud_clone/cubits/music_manager/cubit.dart';
+import 'package:sound_cloud_clone/screens/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,13 +30,47 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return BlocProvider(
-      create: (BuildContext context) => SoundCloudLoginAndRegCubit(),
-      child: const MaterialApp(
+    return MultiBlocProvider(
+
+      providers: [
+        BlocProvider(create: (BuildContext context) => SoundCloudLoginAndRegCubit(),),
+        BlocProvider(create: (BuildContext context) => SoundCloudMusicManagerCubit(),)
+      ],
+      child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        // home: TestScreen(),
-        home: LoginScreen(),
-      ),
+        // home: LoginScreen(),
+        // home: HomeScreen(),
+        home:(
+            AnimatedSplashScreen(
+                backgroundColor:Colors.black54,
+                splash:splash(),
+                nextScreen: HomeScreen(),
+            )
+        ),
+      )
     );
   }
 }
+
+Widget splash(){
+  return Expanded(
+    child: Column(
+      children: const [
+        Text(
+          "Sound Cloud Clone",
+          style: TextStyle(
+              color:Colors.deepOrange,
+              fontSize:39
+          ),
+        ),
+        Icon(
+          Icons.music_note,
+          color: Colors.deepOrange,
+          size: 32,
+        )
+      ],
+    ),
+  );
+  //Image.asset();
+}
+

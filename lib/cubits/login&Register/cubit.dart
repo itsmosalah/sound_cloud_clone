@@ -5,6 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sound_cloud_clone/cubits/login&Register/states.dart';
 
+import '../../models/track_data.dart';
+import '../../shared/network/remote/sound_api.dart';
+
 class SoundCloudLoginAndRegCubit extends Cubit<SoundCloudLoginAndRegStates> {
   SoundCloudLoginAndRegCubit() : super(SoundCloudLoginInitialState());
 
@@ -64,4 +67,9 @@ class SoundCloudLoginAndRegCubit extends Cubit<SoundCloudLoginAndRegStates> {
       emit(SoundCloudCreateUserErrorState());
     });
   }
+
+
+
+
+
 }
