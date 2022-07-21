@@ -21,18 +21,18 @@ class TrackDataPreview extends TrackData {
 
 class TrackDataPlayback extends TrackData {
   String previewURL = "";
-  TrackDataPlayback.fromJson(Map <String, dynamic> json){
+  TrackDataPlayback.fromJson(Map <String, dynamic> json, {int? index = 0}){
     if (json["init"]=="init") {
       return;
     }
-    id = json["tracks"][0]["id"];
-    name = json["tracks"][0]["name"];
-    previewURL = json["tracks"][0]["preview_url"];
-    image640URL = json["tracks"][0]["album"]["images"][0]["url"];
-    image300URL = json["tracks"][0]["album"]["images"][1]["url"];
-    image64URL = json["tracks"][0]["album"]["images"][2]["url"];
-    albumName = json["tracks"][0]["album"]["name"];
-    artistName = json["tracks"][0]["artists"][0]["name"];
+    id = json["tracks"][index]["id"];
+    name = json["tracks"][index]["name"];
+    previewURL = json["tracks"][index]["preview_url"];
+    image640URL = json["tracks"][index]["album"]["images"][0]["url"];
+    image300URL = json["tracks"][index]["album"]["images"][1]["url"];
+    image64URL = json["tracks"][index]["album"]["images"][2]["url"];
+    albumName = json["tracks"][index]["album"]["name"];
+    artistName = json["tracks"][index]["artists"][0]["name"];
 
   }
 }
