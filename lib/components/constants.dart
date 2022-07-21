@@ -8,7 +8,7 @@ String formattedTime(int time){
   time = time ~/ 60;
   int minutes = time%60;
   time = time ~/ 60;
-  int hrs = time%60;
+  int hrs = time;
 
   return [
     if (hrs > 0) hrs < 10 ? "0$hrs" : "$hrs",
