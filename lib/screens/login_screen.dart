@@ -51,7 +51,7 @@ class LoginScreen extends StatelessWidget {
                     Image(image: AssetImage('assets/images/soundcloud.png'),width: 340,),
                     SizedBox(height: 65,),
                     defaultTextField(
-                      labeltxt: 'EmailAddress',
+                      labeltxt: 'Email Address',
                       controller: emailController,
                       prefixicon: Icon(Icons.email_outlined),
                       txtinput: TextInputType.emailAddress,

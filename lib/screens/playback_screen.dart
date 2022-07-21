@@ -13,6 +13,10 @@ class PlaybackScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var cubit = SoundCloudMusicManagerCubit.get(context);
     cubit.setUrlSrc(cubit.nowPlaying.previewURL);
+
+    //testing playlist thing
+    cubit.loadPlayLists();
+
     return BlocConsumer<SoundCloudMusicManagerCubit,SoundCloudMusicManagerStates>(
       listener: (BuildContext context, state) {  },
       builder: (BuildContext context, Object? state) => Scaffold(
