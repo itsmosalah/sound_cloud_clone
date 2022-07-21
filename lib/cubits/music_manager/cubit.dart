@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
@@ -42,17 +44,28 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
   bool isPlaying = false;
   bool urlSrcSet = false;
   String urlSrc = "";
-  AudioPlayer _audioPlayer = AudioPlayer();
+  AudioPlayer audioPlayer = AudioPlayer();
 
+  int duration = 30;
+
+  void slideTo(double newPosition)  {
+     audioPlayer.seek(Duration(seconds: newPosition.toInt()));
+    emit(SoundCloudMoveSliderState());
+  }
+
+  int getPosition(){
+    int value = audioPlayer.position.inSeconds;
+    return value;
+  }
 
   void togglePlayer()  {
     if (!isPlaying){
-       _audioPlayer.play();
+       audioPlayer.play();
       playerButtonIcon = Icons.pause;
       emit(SoundCloudPlayingNowState());
     }
-    else {
-       _audioPlayer.pause();
+    else{
+       audioPlayer.pause();
       playerButtonIcon = Icons.play_arrow;
       emit(SoundCloudPausedState());
     }
@@ -60,12 +73,41 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
   }
 
   void setUrlSrc (String s) async {
-    urlSrc = s;
-    urlSrcSet = true;
-    await _audioPlayer.setUrl(urlSrc);
+    urlSrc = s; urlSrcSet = true;
+    await audioPlayer.setUrl(urlSrc);
+    duration = audioPlayer.duration!.inSeconds;
   }
 
+  void fastForward(int value){
+    int pos = getPosition();
+    if (pos+value >= duration){
+      togglePlayer();
+      slideTo(0);
+    }
+    else {
+      slideTo((pos + value).toDouble());
+    }
+  }
 
+  void rewind(int value){
+    int pos = getPosition();
+    if (pos - value <= 0){
+      slideTo(0);
+    }
+    else {
+      slideTo((pos-value).toDouble());
+    }
+  }
+
+  int speedIdx = 0;
+  List<double>speeds = [1, 1.25, 1.5, 1.75, 2];
+  void cycleSpeed(){
+    speedIdx++;
+    if (speedIdx == speeds.length) speedIdx = 0; //faster than modulo
+    audioPlayer.setSpeed(speeds[speedIdx]);
+  }
+
+  double getCurrentSpeed() => speeds[speedIdx];
 
 //going to add more fields for handling local music file handling
 
