@@ -1,16 +1,14 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sound_cloud_clone/components/components.dart';
 import 'package:sound_cloud_clone/cubits/bottom_nav/cubit.dart';
 import 'package:sound_cloud_clone/cubits/login&Register/cubit.dart';
 import 'package:sound_cloud_clone/cubits/music_manager/cubit.dart';
 import 'package:sound_cloud_clone/cubits/theme_manager/cubit.dart';
 import 'package:sound_cloud_clone/cubits/theme_manager/states.dart';
-import 'package:sound_cloud_clone/screens/home_screen.dart';
 import 'package:sound_cloud_clone/screens/login_screen.dart';
-import 'package:sound_cloud_clone/screens/register_screen.dart';
 import 'package:sound_cloud_clone/styles/theme_data.dart';
 
 void main() async {
@@ -65,32 +63,33 @@ class MyApp extends StatelessWidget {
             themeMode: ThemeManagerCubit.get(context).isDark
                 ? ThemeMode.dark
                 : ThemeMode.light,
-            home: LoginScreen(),
+            // home: splash(),
             // home: HomeScreen(),
-            // home: (AnimatedSplashScreen(
-            //   backgroundColor: Colors.black54,
-            //   splash: splash(),
-            //   nextScreen:
-            //   LoginScreen(),
-            // )),
+            home: (AnimatedSplashScreen(
+              centered: true,
+              splashIconSize: 900,
+              splash: splash(),
+              nextScreen:
+              LoginScreen(),
+            )),
           ),
         ));
   }
 }
 
 Widget splash() {
-  return Expanded(
+  return Container(
+    width: double.infinity,
+    decoration: BoxDecoration(
+      gradient: LinearGradient(
+        colors: [Colors.deepOrange,Colors.orange]
+      ),
+    ),
     child: Column(
-      children: const [
-        Text(
-          "Sound Cloud Clone",
-          style: TextStyle(color: Colors.deepOrange, fontSize: 39),
-        ),
-        Icon(
-          Icons.music_note,
-          color: Colors.deepOrange,
-          size: 32,
-        )
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image(image: AssetImage('assets/images/soundcloud_Splash.png'),width: 260,),
+        defaultText(text: 'SoundCloud',fontsize: 32,textColor: Colors.white,)
       ],
     ),
   );

@@ -41,15 +41,15 @@ class LoginScreen extends StatelessWidget {
       builder: (context, state) {
 
         return Scaffold(
-          body: Center(
-            child: SingleChildScrollView(
+          body: SingleChildScrollView(
+            child: Center(
               child: Padding(
                 padding: const EdgeInsets.all(32.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    defaultText(text: "Login",fontsize: 40),
-                    SizedBox(height: 20,),
+                    SizedBox(height: 60,),
+                    Image(image: AssetImage('assets/images/soundcloud.png'),width: 340,),
+                    SizedBox(height: 65,),
                     defaultTextField(
                       labeltxt: 'EmailAddress',
                       controller: emailController,

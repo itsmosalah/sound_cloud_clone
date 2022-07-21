@@ -69,7 +69,7 @@ ThemeData DarkMode = ThemeData(
 );
 
 ThemeData LightMode = ThemeData(
-  // fontFamily: 'Jannah',
+  fontFamily: 'Jannah',
   appBarTheme: AppBarTheme(
     // titleSpacing: 20.0,
       backgroundColor: Colors.white,
