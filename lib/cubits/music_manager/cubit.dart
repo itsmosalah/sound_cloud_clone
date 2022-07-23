@@ -117,10 +117,10 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
 
 //going to add more fields for handling local music file handling
 
+  //this should be within the logged user cubit and accessed here
   List<Playlist>userPlaylists = [];
-
   void loadPlayLists(){
-    //this should load the playlists from the firebase
+    //this should load the playlists from the firebase / logged user cubit
     //load playlists in a list of map where each map corresponds to a playlist
 
     //this should be the ONE OF THE json we receive after decoding it
@@ -130,4 +130,5 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
     Map<String,dynamic> data = jsonDecode(jsonStr);
     userPlaylists.add(Playlist.fromJson(data));
   }
+
 }

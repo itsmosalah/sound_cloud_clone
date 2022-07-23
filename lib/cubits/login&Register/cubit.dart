@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sound_cloud_clone/cubits/login&Register/states.dart';
 import 'package:sound_cloud_clone/models/user_data.dart';
 
+import '../../models/playlist.dart';
 import '../../models/track_data.dart';
 import '../../shared/network/remote/sound_api.dart';
 
@@ -114,5 +115,28 @@ class SoundCloudLoginAndRegCubit extends Cubit<SoundCloudLoginAndRegStates> {
     }).catchError((error){
       emit(SoundCloudUpdateUserErrorState());
     });
+  }
+
+
+
+
+  //this should have access to ID of CURRENTLY LOGGED USER
+  void updatePlaylists(List<Playlist> playlists){
+    List<Map<String,dynamic>> sendJson = [];
+    for (Playlist pl in playlists){
+      sendJson.add(pl.toJson());
+    }
+
+    FirebaseFirestore.instance.collection('users').doc("RXynMNk76uPAmgJT5GXMobumTZA3").update(
+        {
+          'playlists': sendJson,
+        }).then((value)
+    {
+      emit(SoundCloudUpdatePlaylistSuccessState());
+    }).catchError((error){
+      emit(SoundCloudUpdatePlaylistErrorState());
+    });
+
+
   }
 }

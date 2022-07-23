@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sound_cloud_clone/cubits/login&Register/cubit.dart';
 import '../components/components.dart';
 import '../components/constants.dart';
 import '../cubits/music_manager/cubit.dart';
@@ -14,8 +15,12 @@ class PlaybackScreen extends StatelessWidget {
     var cubit = SoundCloudMusicManagerCubit.get(context);
     cubit.setUrlSrc(cubit.nowPlaying.previewURL);
 
-    //testing playlist thing
+    //this should be called once, loading the playlist into a cubit for accessing
     cubit.loadPlayLists();
+
+    var userCubit = SoundCloudLoginAndRegCubit();
+    //this should only be called once upon log in AND when user modifies playlist
+    userCubit.updatePlaylists(cubit.userPlaylists);
 
     return BlocConsumer<SoundCloudMusicManagerCubit,SoundCloudMusicManagerStates>(
       listener: (BuildContext context, state) {  },

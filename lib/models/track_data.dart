@@ -35,6 +35,23 @@ class TrackDataPlayback extends TrackData {
     artistName = json["tracks"][index]["artists"][0]["name"];
 
   }
+
+  Map<String,dynamic> toJson(){
+    return {
+      "id" : id,
+      "name" : name,
+      "album" : {
+        "images" : [
+          {"url" : image640URL},
+          {"url" : image300URL},
+          {"url" : image64URL}
+        ],
+        "name" : albumName,
+      },
+      "preview_url" : previewURL,
+      "artists" : [{"name" : artistName}]
+    };
+  }
 }
 
 /*
