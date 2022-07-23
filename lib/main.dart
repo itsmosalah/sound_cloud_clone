@@ -8,7 +8,9 @@ import 'package:sound_cloud_clone/cubits/login&Register/cubit.dart';
 import 'package:sound_cloud_clone/cubits/music_manager/cubit.dart';
 import 'package:sound_cloud_clone/cubits/theme_manager/cubit.dart';
 import 'package:sound_cloud_clone/cubits/theme_manager/states.dart';
+import 'package:sound_cloud_clone/screens/home_screen.dart';
 import 'package:sound_cloud_clone/screens/login_screen.dart';
+import 'package:sound_cloud_clone/screens/tracks_screen.dart';
 import 'package:sound_cloud_clone/styles/theme_data.dart';
 
 void main() async {

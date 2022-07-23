@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sound_cloud_clone/components/components.dart';
+import 'package:sound_cloud_clone/components/constants.dart';
 import 'package:sound_cloud_clone/cubits/login&Register/cubit.dart';
 import 'package:sound_cloud_clone/cubits/login&Register/states.dart';
 import 'package:sound_cloud_clone/screens/register_screen.dart';
@@ -29,7 +30,7 @@ class LoginScreen extends StatelessWidget {
           {
             Fluttertoast.showToast(
                 msg: 'Login Successfully',
-                backgroundColor: Colors.green,textColor: Colors.white);
+                backgroundColor:defaultColor,textColor: Colors.white);
             navigateAndFinish(context, HomeScreen());
           }
         else if (state is SoundCloudLoginErrorState) {

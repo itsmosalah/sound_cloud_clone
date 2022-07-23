@@ -9,18 +9,18 @@ ThemeData DarkMode = ThemeData(
   primarySwatch: defaultColor,
 
   appBarTheme: AppBarTheme(
-    // titleSpacing: 20.0,
+      // titleSpacing: 20.0,
       backgroundColor: HexColor('333739'),
       elevation: 5.0,
       foregroundColor: Colors.white,
       iconTheme: IconThemeData(color: Colors.white)
-    // titleTextStyle: const TextStyle(
-    //   color: Colors.white,
-    //   fontSize: 18.0,
-    //   fontWeight: FontWeight.bold,
-    //   letterSpacing: 1.3,
-    // ),
-  ),
+      // titleTextStyle: const TextStyle(
+      //   color: Colors.white,
+      //   fontSize: 18.0,
+      //   fontWeight: FontWeight.bold,
+      //   letterSpacing: 1.3,
+      // ),
+      ),
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: HexColor('333739'),
       unselectedItemColor: Colors.white,
@@ -29,12 +29,20 @@ ThemeData DarkMode = ThemeData(
       ),
       selectedLabelStyle: TextStyle(fontSize: 19),
       selectedIconTheme: IconThemeData(size: 26)),
-  textTheme: const TextTheme(
-    // controller color in TextFormField
+  textTheme: TextTheme(
+    // For Panel's Text
     subtitle1: TextStyle(
-      color: Colors.black,
+      fontSize: 15,
+      color: Colors.white,
+      letterSpacing: 1.3,
+      overflow: TextOverflow.ellipsis
     ),
-    subtitle2: TextStyle(color: Colors.white, fontSize: 20),
+    subtitle2: TextStyle(
+      fontSize: 18,
+      color: Colors.white,
+      letterSpacing: 1.3,
+      overflow: TextOverflow.ellipsis
+    ),
     // For Headers
     headline1: TextStyle(
         fontSize: 25.0,
@@ -46,6 +54,8 @@ ThemeData DarkMode = ThemeData(
       fontSize: 25,
       color: Colors.white,
     ),
+    headline4: TextStyle(
+        fontSize: 40.0, color: Colors.white, letterSpacing: 2.5, height: 1),
     // For Normal Text
     bodyText1: TextStyle(
       fontSize: 25,
@@ -56,7 +66,7 @@ ThemeData DarkMode = ThemeData(
     // Label Style in TextFormField
     bodyText2: TextStyle(
       fontSize: 15,
-      color: Colors.white,
+      color: Colors.grey[400],
     ),
 
     headline3: TextStyle(
@@ -71,17 +81,17 @@ ThemeData DarkMode = ThemeData(
 ThemeData LightMode = ThemeData(
   fontFamily: 'Jannah',
   appBarTheme: AppBarTheme(
-    // titleSpacing: 20.0,
+      // titleSpacing: 20.0,
       backgroundColor: Colors.white,
       elevation: 5.0,
       iconTheme: IconThemeData(color: Colors.black)
-    // titleTextStyle: TextStyle(
-    //   color: Colors.black,
-    //   fontSize: 25.0,
-    //   fontWeight: FontWeight.bold,
-    //   letterSpacing: 1.3,
-    // ),
-  ),
+      // titleTextStyle: TextStyle(
+      //   color: Colors.black,
+      //   fontSize: 25.0,
+      //   fontWeight: FontWeight.bold,
+      //   letterSpacing: 1.3,
+      // ),
+      ),
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
     selectedLabelStyle: TextStyle(fontSize: 19),
     selectedIconTheme: IconThemeData(size: 26),
@@ -96,14 +106,24 @@ ThemeData LightMode = ThemeData(
         fontWeight: FontWeight.bold,
         color: Colors.black,
         letterSpacing: 1.4),
-    subtitle2: TextStyle(color: Colors.black, fontSize: 20),
-
+    subtitle2: TextStyle(
+        fontSize: 18,
+        color: Colors.black,
+        letterSpacing: 1.3,
+        overflow: TextOverflow.ellipsis
+    ),
+    subtitle1: TextStyle(
+      fontSize: 15,
+      color: Colors.black,
+      letterSpacing: 1.3
+    ),
     headline2: TextStyle(
       fontStyle: FontStyle.italic,
       fontSize: 25,
       color: Colors.grey[600],
     ),
-
+    headline4:
+        TextStyle(fontSize: 40.0, color: Colors.black,letterSpacing: 2.5, height: 1),
     // Normal Text
     bodyText1: TextStyle(
       fontSize: 25,
@@ -113,8 +133,8 @@ ThemeData LightMode = ThemeData(
 
     // Label Style in TextFormField
     bodyText2: TextStyle(
-      fontSize: 16,
-      color: Colors.black,
+      fontSize: 15,
+      color: Colors.grey[600],
     ),
     headline3: TextStyle(
         fontSize: 25,

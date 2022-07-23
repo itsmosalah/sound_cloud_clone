@@ -9,7 +9,7 @@ import '../screens/login_screen.dart';
 
 void navigateTo(context, nextPage) => Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => nextPage),
+      MaterialPageRoute(builder: (context) => nextPage,),
     );
 
 void navigateAndFinish(context, nextPage) => Navigator.pushAndRemoveUntil(

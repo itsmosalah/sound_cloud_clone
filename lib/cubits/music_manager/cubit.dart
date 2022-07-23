@@ -40,15 +40,15 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
     //if not loaded already, request it from api
     api.getTrack("id").then((value) {
       nowPlaying = value;
-      emit(SoundCloudPlayingNowState());
+      emit(SoundCloudGotTrackDataState());
     });
 
   }
 
-
+  bool stillPlaying = false;
   IconData playerButtonIcon = Icons.play_arrow;
   bool isPlaying = false;
-  bool urlSrcSet = false;
+
   String urlSrc = "";
   AudioPlayer audioPlayer = AudioPlayer();
 
@@ -79,7 +79,7 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
   }
 
   void setUrlSrc (String s) async {
-    urlSrc = s; urlSrcSet = true;
+    urlSrc = s;
     await audioPlayer.setUrl(urlSrc);
     duration = audioPlayer.duration!.inSeconds;
   }
