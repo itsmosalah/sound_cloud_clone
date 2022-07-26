@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sound_cloud_clone/cubits/login&Register/cubit.dart';
 import 'package:sound_cloud_clone/cubits/theme_manager/cubit.dart';
+import 'package:sound_cloud_clone/models/playlist.dart';
 import '../components/components.dart';
 import '../components/constants.dart';
 import '../cubits/music_manager/cubit.dart';
@@ -56,57 +57,77 @@ class _PlaybackScreenState extends State<PlaybackScreen>
                   showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                        title: defaultText(text: 'Choose a Playlist'),
-                        content: Column(
-                          children: [
-                            /*ListView.separated(
-                              itemBuilder: (context, index){
-                                return InkWell(
-                                  onTap: (){
-
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(20.0),
-                                    child: Row(
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            defaultText(
-                                                text: cubit.userPlaylists[index].name.toString(),
-                                                myStyle: Theme
-                                                    .of(context)
-                                                    .textTheme
-                                                    .subtitle2
-                                            ),
-                                            defaultText(
-                                                text: "Number of tracks ${cubit.userPlaylists[index].size}",
-                                                myStyle: Theme
-                                                    .of(context)
-                                                    .textTheme
-                                                    .bodyText2
-                                            ),
-                                          ],
-                                        ),
-                                        Spacer(),
-                                        Icon(Icons.arrow_forward_ios),
-                                      ],
+                            title: defaultText(text: 'Choose a Playlist'),
+                            content: Container(
+                              width: 300,
+                              child: ListView.separated(
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  return InkWell(
+                                    onTap: () {
+                                      bool newSong = false;
+                                      cubit.userPlaylists[index].trackList
+                                          .forEach((element) {
+                                        if (element.name !=
+                                                cubit.nowPlaying.name) {
+                                          newSong = true;
+                                        } else {
+                                          newSong = false;
+                                        }
+                                      });
+                                      if (newSong || cubit.userPlaylists[index].size==0) {
+                                        cubit.userPlaylists[index]
+                                            .addTrack(cubit.nowPlaying);
+                                        cubit.updatePlaylists();
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                'Added to ${cubit.userPlaylists[index].name}',
+                                            backgroundColor: defaultColor,
+                                            textColor: Colors.white);
+                                      } else {
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                'This Song is Already exists in this Playlist',
+                                            backgroundColor: Colors.red,
+                                            textColor: Colors.white);
+                                      }
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(20.0),
+                                      child: Row(
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              defaultText(
+                                                  text: cubit
+                                                      .userPlaylists[index]
+                                                      .name,
+                                                  myStyle: Theme.of(context)
+                                                      .textTheme
+                                                      .subtitle2),
+                                              defaultText(
+                                                  text: "Number of tracks = " +
+                                                      '${cubit.userPlaylists[index].size}',
+                                                  myStyle: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText2),
+                                            ],
+                                          ),
+                                          Spacer(),
+                                          Icon(Icons.arrow_forward_ios),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                              separatorBuilder: (context, index) => myDivider(),
-                              itemCount: cubit.userPlaylists.length,
-
-                            ),*/
-                          ],
-                        ),
-                      )
-                  );
-                  Fluttertoast.showToast(
-                      msg: 'Added to Playlist',
-                      backgroundColor: Colors.green,
-                      textColor: Colors.white);
+                                  );
+                                },
+                                separatorBuilder: (context, index) =>
+                                    myDivider(),
+                                itemCount: cubit.userPlaylists.length,
+                              ),
+                            ),
+                          ));
                 },
                 icon: Icon(
                   Icons.add,
@@ -154,8 +175,7 @@ class _PlaybackScreenState extends State<PlaybackScreen>
                           child: defaultText(
                               text: cubit.nowPlaying.name,
                               myStyle: Theme.of(context).textTheme.headline4,
-                              textOverflow: TextOverflow.ellipsis
-                          ),
+                              textOverflow: TextOverflow.ellipsis),
                         ),
                         Container(
                           margin: EdgeInsets.only(left: 3),

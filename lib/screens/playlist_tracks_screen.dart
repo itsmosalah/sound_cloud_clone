@@ -27,11 +27,21 @@ class PlayListTracksScreen extends StatelessWidget {
           appBar: myAppBar(
               context,
               title: currentPlaylist.name,
+            myActions: 
+            [
+              IconButton(onPressed: ()
+              {
+                cubit.userPlaylists.removeAt(playlistIndex);
+                Navigator.pop(context);
+                cubit.updatePlaylists();
+
+              }, icon: Icon(Icons.delete))
+            ]
           ),
           body: ListView.separated(
               itemBuilder: (context, index){
                 return Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(18.0),
                   child: Row(
                     children: [
                       Image(image: NetworkImage(currentPlaylist.trackList[index].image64URL)),
@@ -39,23 +49,48 @@ class PlayListTracksScreen extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          defaultText(
-                              text: currentPlaylist.trackList[index].name,
-                              myStyle: Theme
-                                  .of(context)
-                                  .textTheme
-                                  .subtitle2
+                          Container(
+                            width: 190,
+                            child: defaultText(
+                                text: currentPlaylist.trackList[index].name,
+                                myStyle: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .subtitle2,
+                              textOverflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                          defaultText(
-                              text: currentPlaylist.trackList[index].albumName,
-                              myStyle: Theme
-                                  .of(context)
-                                  .textTheme
-                                  .bodyText2
+                          Container(
+                            width: 190,
+                            child: defaultText(
+                                text: currentPlaylist.trackList[index].albumName,
+                                myStyle: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .bodyText2,
+                              textOverflow: TextOverflow.ellipsis
+                            ),
                           ),
                         ],
                       ),
                       Spacer(),
+                      CircleAvatar(
+                        backgroundColor: defaultColor,
+                        child: IconButton(
+                          onPressed: ()  {
+                            currentPlaylist.removeTrack(index);
+                            cubit.updatePlaylists();
+                          },
+                          icon: Icon(Icons.delete),
+                          color: ThemeManagerCubit
+                              .get(context)
+                              .isDark
+                              ? Colors.white
+                              : Colors.black,
+                        ),
+                      ),
+
+                      SizedBox(width: 4,),
                       CircleAvatar(
                         backgroundColor: defaultColor,
                         child: IconButton(

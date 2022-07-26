@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:math';
 
@@ -22,7 +21,7 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
 
   List<TrackDataPreview> trackList = [];
 
-  void setTrackList ()  {
+  void setTrackList() {
     SoundAPI api = SoundAPI();
     // Map<String,dynamic> mp =
     api.getSearchResults("ay 7aga").then((value) {
@@ -42,22 +41,27 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
         }
     );
   }*/
+  bool loaded = false;
 
-  TrackDataPlayback getTrack(String id){
+  TrackDataPlayback getTrack(String id) {
     //this should take the track id string
     //and then it should check the set of loaded tracks
-    
+
     emit(SoundCloudMusicManagerLoadingState());
     SoundAPI api = SoundAPI();
     //if not loaded already, request it from api
     api.getTrack(id).then((value) {
       nowPlaying = value;
-      emit(SoundCloudGotTrackDataState());
+      emit(SoundCloudGotTrackAndPlaylistsState());
+      if (!loaded) {
+        loadPlayLists();
+        loaded = true;
+      }
+
     });
 
     return nowPlaying;
   }
-
 
   bool stillPlaying = false;
   IconData playerButtonIcon = Icons.play_arrow;
@@ -67,60 +71,58 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
   AudioPlayer audioPlayer = AudioPlayer();
   int duration = 0;
 
-  void slideTo(double newPosition)  {
-     audioPlayer.seek(Duration(seconds: newPosition.toInt()));
+  void slideTo(double newPosition) {
+    audioPlayer.seek(Duration(seconds: newPosition.toInt()));
     emit(SoundCloudMoveSliderState());
   }
 
-  int getPosition(){
+  int getPosition() {
     int value = audioPlayer.position.inSeconds;
     return value;
   }
 
-  void togglePlayer()  {
-    if (!isPlaying){
-       audioPlayer.play();
+  void togglePlayer() {
+    if (!isPlaying) {
+      audioPlayer.play();
       playerButtonIcon = Icons.pause;
       emit(SoundCloudPlayingNowState());
-    }
-    else{
-       audioPlayer.pause();
+    } else {
+      audioPlayer.pause();
       playerButtonIcon = Icons.play_arrow;
       emit(SoundCloudPausedState());
     }
     isPlaying = !isPlaying;
   }
 
-  Future<void> setUrlSrc (String s) async {
+  Future<void> setUrlSrc(String s) async {
     urlSrc = s;
     await audioPlayer.setUrl(urlSrc);
     duration = audioPlayer.duration!.inSeconds;
   }
 
-  void fastForward(int value){
+  void fastForward(int value) {
     int pos = getPosition();
-    if (pos+value >= duration){
+    if (pos + value >= duration) {
       if (isPlaying) togglePlayer();
       slideTo(0);
-    }
-    else {
+    } else {
       slideTo((pos + value).toDouble());
     }
   }
 
-  void rewind(int value){
+  void rewind(int value) {
     int pos = getPosition();
-    if (pos - value <= 0){
+    if (pos - value <= 0) {
       slideTo(0);
-    }
-    else {
-      slideTo((pos-value).toDouble());
+    } else {
+      slideTo((pos - value).toDouble());
     }
   }
 
   int speedIdx = 0;
-  List<double>speeds = [1, 1.25, 1.5, 1.75, 2];
-  void cycleSpeed(){
+  List<double> speeds = [1, 1.25, 1.5, 1.75, 2];
+
+  void cycleSpeed() {
     speedIdx++;
     if (speedIdx == speeds.length) speedIdx = 0; //faster than modulo
     audioPlayer.setSpeed(speeds[speedIdx]);
@@ -130,8 +132,8 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
 
 //going to add more fields for handling local music file handling
 
-  void createPlaylist(String name){
-    for (Playlist lst in userPlaylists){
+  void createPlaylist(String name) {
+    for (Playlist lst in userPlaylists) {
       if (name == lst.name) {
         emit(SoundCloudAddPlaylistErrorState());
         return;
@@ -142,21 +144,22 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
     updatePlaylists();
   }
 
-  List<Playlist>userPlaylists = [];
+  List<Playlist> userPlaylists = [];
 
-  void loadPlayLists() async {
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(loggedUserID)
-        .get()
-        .then((DocumentSnapshot doc) {
+  void loadPlayLists() {
+    FirebaseFirestore.instance.collection('users').doc(loggedUserID).get().then(
+      (DocumentSnapshot doc) {
         final data = doc.data() as Map<String, dynamic>;
-        data["playlists"].forEach((element){
+        data["playlists"].forEach((element) {
           final json = element as Map<String, dynamic>;
           userPlaylists.add(Playlist.fromJson(json));
         });
-    },
-      onError: (e) => print("Error getting playlists $e"),
+        emit(SoundCloudPlaylistsLoadedSuccessState());
+      },
+      onError: (e) {
+        print("Error getting playlists $e");
+        // emit(SoundCloudPlaylistsLoadedErrorState());
+      },
     );
 
 /*
@@ -171,23 +174,18 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
     userPlaylists.add(Playlist.fromJson(data));*/
   }
 
-
   //this should have access to ID of CURRENTLY LOGGED USER
-  void updatePlaylists(){
-    List<Map<String,dynamic>> sendJson = [];
-    for (Playlist pl in userPlaylists){
+  void updatePlaylists() {
+    List<Map<String, dynamic>> sendJson = [];
+    for (Playlist pl in userPlaylists) {
       sendJson.add(pl.toJson());
     }
 
-    FirebaseFirestore.instance.collection('users').doc(
-        loggedUserID
-    ).update(
-        {
-          'playlists': sendJson,
-        }).then((value)
-    {
+    FirebaseFirestore.instance.collection('users').doc(loggedUserID).update({
+      'playlists': sendJson,
+    }).then((value) {
       emit(SoundCloudUpdatePlaylistSuccessState());
-    }).catchError((error){
+    }).catchError((error) {
       emit(SoundCloudUpdatePlaylistErrorState());
     });
   }

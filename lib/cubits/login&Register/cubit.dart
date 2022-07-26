@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sound_cloud_clone/components/constants.dart';
 import 'package:sound_cloud_clone/cubits/login&Register/states.dart';
+import 'package:sound_cloud_clone/cubits/music_manager/cubit.dart';
 import 'package:sound_cloud_clone/models/user_data.dart';
 
 import '../../models/playlist.dart';

@@ -26,11 +26,11 @@ class TracksScreen extends StatelessWidget {
         // cubit.setTrackList();
         // cubit.setNowPlaying(); idk why
         cubit.getTrack("dummy");
-        cubit.loadPlayLists();
+
         return Scaffold(
           appBar: myAppBar(context, title: 'SoundCloud'),
           body: ConditionalBuilder(
-            condition: state is SoundCloudGotTrackDataState,
+            condition: state is SoundCloudGotTrackAndPlaylistsState,
             builder: (context) {
               return WeSlide(
                 body: Container(
@@ -100,6 +100,7 @@ class TracksScreen extends StatelessWidget {
                                     cubit.setUrlSrc(cubit.nowPlaying.previewURL);
                                     cubit.togglePlayer();
                                     // cubit.setNowPlaying(cubit.nowPlaying);
+                                    // cubit.loadPlayLists();
                                     Navigator.push(
                                         context,
                                         PageTransition(
