@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sound_cloud_clone/components/constants.dart';
 import 'package:sound_cloud_clone/cubits/login&Register/states.dart';
 import 'package:sound_cloud_clone/models/user_data.dart';
 
@@ -36,12 +37,15 @@ class SoundCloudLoginAndRegCubit extends Cubit<SoundCloudLoginAndRegStates> {
           .then((value) {
         value.docs.forEach((element) {
           // to get user's logged data
-          if (element['email'] == email)
-            userLogged = UserData(name: element['name'],
+          if (element['email'] == email) {
+            loggedUserID = element['uId'];
+            userLogged = UserData(
+                name: element['name'],
                 password: element['password'],
                 phone: element['phone'],
                 uId: element['uId']
             );
+          }
         });
       });
       emit(SoundCloudLoginSuccessState());
@@ -117,26 +121,4 @@ class SoundCloudLoginAndRegCubit extends Cubit<SoundCloudLoginAndRegStates> {
     });
   }
 
-
-
-
-  //this should have access to ID of CURRENTLY LOGGED USER
-  void updatePlaylists(List<Playlist> playlists){
-    List<Map<String,dynamic>> sendJson = [];
-    for (Playlist pl in playlists){
-      sendJson.add(pl.toJson());
-    }
-
-    FirebaseFirestore.instance.collection('users').doc("RXynMNk76uPAmgJT5GXMobumTZA3").update(
-        {
-          'playlists': sendJson,
-        }).then((value)
-    {
-      emit(SoundCloudUpdatePlaylistSuccessState());
-    }).catchError((error){
-      emit(SoundCloudUpdatePlaylistErrorState());
-    });
-
-
-  }
 }

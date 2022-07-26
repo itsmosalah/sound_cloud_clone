@@ -50,7 +50,7 @@ class ProfileScreen extends StatelessWidget {
                     defaultTextField(
                         labeltxt: 'Name',
                         controller: nameController,
-                        prefixicon: Icon(Icons.person),
+                        prefixIcon: Icon(Icons.person),
                         txtinput: TextInputType.name,
                         suffix: Icons.close,
                         hintStyle: Theme.of(context).textTheme.subtitle1,
@@ -64,7 +64,7 @@ class ProfileScreen extends StatelessWidget {
                     defaultTextField(
                         labeltxt: 'Phone',
                         controller: phoneController,
-                        prefixicon: Icon(Icons.phone),
+                        prefixIcon: Icon(Icons.phone),
                         txtinput: TextInputType.phone,
                         suffix: Icons.close,
                         SuffixPressed: () {
@@ -77,7 +77,7 @@ class ProfileScreen extends StatelessWidget {
                       labeltxt: 'Password',
                       isPass: cubit.isPass,
                       controller: passwordController,
-                      prefixicon: Icon(Icons.lock_outline),
+                      prefixIcon: Icon(Icons.lock_outline),
                       txtinput: TextInputType.visiblePassword,
                       suffix: cubit.isPass
                           ? Icons.remove_red_eye

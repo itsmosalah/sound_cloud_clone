@@ -19,7 +19,7 @@ void navigateAndFinish(context, nextPage) => Navigator.pushAndRemoveUntil(
 
 Widget defaultTextField({
   required String labeltxt,
-  required Icon prefixicon,
+  Icon? prefixIcon,
   bool isPass = false,
   IconData? suffix,
   TextEditingController? controller,
@@ -28,6 +28,7 @@ Widget defaultTextField({
   Function(String val)? onSubmit,
   Function(String value)? valid,
   TextStyle? hintStyle,
+  enableBorder = false,
 }) {
   return TextFormField(
     keyboardType: txtinput,
@@ -39,16 +40,22 @@ Widget defaultTextField({
       fillColor: Colors.white,
       filled: true,
       hintText: labeltxt,
-      border: InputBorder.none,
-      enabledBorder: OutlineInputBorder(
+      border: enableBorder ? null : InputBorder.none,
+      enabledBorder: enableBorder ? OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20),
+        borderSide: BorderSide(color: Colors.black, width: 1),
+      ) : OutlineInputBorder(
         borderRadius: BorderRadius.circular(20),
         borderSide: BorderSide(color: Colors.white, width: 10),
       ),
-      focusedBorder: OutlineInputBorder(
+      focusedBorder: enableBorder ? OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20),
+        borderSide: BorderSide(color: Colors.black, width: 1),
+      ) : OutlineInputBorder(
         borderRadius: BorderRadius.circular(20),
         borderSide: BorderSide(color: Colors.white, width: 10),
       ),
-      prefixIcon: prefixicon,
+      prefixIcon: prefixIcon,
       suffixIcon: IconButton(
         icon: Icon(suffix),
         onPressed: SuffixPressed,
@@ -62,7 +69,7 @@ Widget defaultTextField({
 
 Widget defaultText(
         {required String text,
-        double? fontsize,
+        double? fontSize,
         double? letterSpacing,
         isUpperCase = false,
         textColor,
@@ -71,18 +78,21 @@ Widget defaultText(
         TextOverflow? textOverflow,
         FontStyle? fontStyle,
         TextStyle? hintStyle,
-        TextAlign? textAlign}) =>
+        TextAlign? textAlign,
+        TextStyle? myStyle
+        }) =>
     Text(
       isUpperCase ? text.toUpperCase() : text,
       maxLines: linesMax,
       overflow: textOverflow,
       textAlign: textAlign,
-      style: TextStyle(
-          fontSize: fontsize,
+      style: myStyle ?? TextStyle(
+          fontSize: fontSize,
           color: textColor,
           height: textHeight,
           fontStyle: fontStyle,
-          letterSpacing: letterSpacing),
+          letterSpacing: letterSpacing
+      ),
     );
 
 Widget defaultTextButton(
@@ -201,7 +211,7 @@ Widget buildSettingsItem(SettingsModel model, context) => Container(
               width: 20,
             ),
             defaultText(
-                text: model.text!, textColor: Colors.black, fontsize: 16),
+                text: model.text!, textColor: Colors.black, fontSize: 16),
             Spacer(),
             if (!model.darkMode!)
               Icon(
@@ -221,3 +231,18 @@ Widget buildSettingsItem(SettingsModel model, context) => Container(
         ),
       ),
     ));
+
+AppBar myAppBar(BuildContext context, {required String title, List<Widget>?myActions}){
+  return AppBar(
+    title: Text(
+      title,
+      style: Theme
+          .of(context)
+          .textTheme
+          .headline1,
+    ),
+    centerTitle: true,
+    backgroundColor: defaultColor,
+    actions: myActions ?? [],
+  );
+}

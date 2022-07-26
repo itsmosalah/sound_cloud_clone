@@ -16,3 +16,5 @@ String formattedTime(int time){
     seconds < 10 ? "0$seconds" : "$seconds",
   ].join(":");
 }
+
+String loggedUserID = "";

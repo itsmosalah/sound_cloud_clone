@@ -6,7 +6,7 @@ class Playlist {
   int size = 0;
   List<TrackDataPlayback> trackList = [];
 
-  Playlist();
+  Playlist({required this.name});
 
   Playlist.fromJson(Map<String,dynamic>json){
     size = json['no_of_tracks'];
@@ -28,6 +28,15 @@ class Playlist {
     };
   }
 
+  void addTrack(TrackDataPlayback x){
+    trackList.add(x);
+    size++;
+  }
+
+  void removeTrack(int index){
+    trackList.removeAt(index);
+    size--;
+  }
   /*
   planned json looks like so:
 

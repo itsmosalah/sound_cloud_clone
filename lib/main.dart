@@ -91,7 +91,7 @@ Widget splash() {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Image(image: AssetImage('assets/images/soundcloud_Splash.png'),width: 260,),
-        defaultText(text: 'SoundCloud',fontsize: 32,textColor: Colors.white,)
+        defaultText(text: 'SoundCloud',fontSize: 32,textColor: Colors.white,)
       ],
     ),
   );

@@ -22,9 +22,6 @@ class TrackDataPreview extends TrackData {
 class TrackDataPlayback extends TrackData {
   String previewURL = "";
   TrackDataPlayback.fromJson(Map <String, dynamic> json, {int? index = 0}){
-    if (json["init"]=="init") {
-      return;
-    }
     id = json["tracks"][index]["id"];
     name = json["tracks"][index]["name"];
     previewURL = json["tracks"][index]["preview_url"];
@@ -35,7 +32,7 @@ class TrackDataPlayback extends TrackData {
     artistName = json["tracks"][index]["artists"][0]["name"];
 
   }
-
+  TrackDataPlayback();
   Map<String,dynamic> toJson(){
     return {
       "id" : id,

@@ -9,6 +9,7 @@ import 'package:sound_cloud_clone/components/components.dart';
 import 'package:sound_cloud_clone/components/constants.dart';
 import 'package:sound_cloud_clone/cubits/login&Register/cubit.dart';
 import 'package:sound_cloud_clone/cubits/login&Register/states.dart';
+import 'package:sound_cloud_clone/cubits/music_manager/cubit.dart';
 import 'package:sound_cloud_clone/screens/register_screen.dart';
 
 import 'home_screen.dart';
@@ -54,7 +55,7 @@ class LoginScreen extends StatelessWidget {
                     defaultTextField(
                       labeltxt: 'Email Address',
                       controller: emailController,
-                      prefixicon: Icon(Icons.email_outlined),
+                      prefixIcon: Icon(Icons.email_outlined),
                       txtinput: TextInputType.emailAddress,
                     ),
                     SizedBox(
@@ -66,7 +67,7 @@ class LoginScreen extends StatelessWidget {
                           .get(context)
                           .isPass,
                       controller: passController,
-                      prefixicon: Icon(Icons.lock_outline),
+                      prefixIcon: Icon(Icons.lock_outline),
                       txtinput: TextInputType.visiblePassword,
                       suffix: SoundCloudLoginAndRegCubit
                           .get(context)
@@ -108,7 +109,7 @@ class LoginScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         defaultText(
-                            text: 'Don\'t have an account? ', fontsize: 15),
+                            text: 'Don\'t have an account? ', fontSize: 15),
                         defaultTextButton(
                             text: 'register',
                             fn: () {

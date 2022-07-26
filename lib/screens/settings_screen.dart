@@ -38,12 +38,6 @@ class SettingsScreen extends StatelessWidget {
           screen: ProfileScreen(),
           signOut: false),
       SettingsModel(
-          iconData: Icons.playlist_play_outlined,
-          text: "Playlists",
-          darkMode: false,
-          screen: PlayListsScreen(),
-          signOut: false),
-      SettingsModel(
           iconData: Icons.dark_mode_outlined,
           text: "Appearance",
           darkMode: true,
@@ -59,13 +53,7 @@ class SettingsScreen extends StatelessWidget {
     return BlocConsumer<ThemeManagerCubit, ThemeManagerStates>(
       listener: (context, state) {},
       builder: (context, state) => Scaffold(
-        appBar: AppBar(
-          title:Text(
-            'Settings',style: Theme.of(context).textTheme.headline1,
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.deepOrange,
-        ),
+        appBar: myAppBar(context, title: 'Settings'),
         body: Padding(
           padding: const EdgeInsets.only(top: 60),
           child: ListView.separated(

@@ -33,7 +33,7 @@ ThemeData DarkMode = ThemeData(
     // For Panel's Text
     subtitle1: TextStyle(
       fontSize: 15,
-      color: Colors.white,
+      color: Colors.black,
       letterSpacing: 1.3,
       overflow: TextOverflow.ellipsis
     ),
@@ -69,7 +69,7 @@ ThemeData DarkMode = ThemeData(
       color: Colors.grey[400],
     ),
 
-    headline3: TextStyle(
+    headline3: const TextStyle(
         fontSize: 25,
         height: 1.2,
         color: Colors.white,
@@ -80,7 +80,7 @@ ThemeData DarkMode = ThemeData(
 
 ThemeData LightMode = ThemeData(
   fontFamily: 'Jannah',
-  appBarTheme: AppBarTheme(
+  appBarTheme: const AppBarTheme(
       // titleSpacing: 20.0,
       backgroundColor: Colors.white,
       elevation: 5.0,
@@ -92,7 +92,7 @@ ThemeData LightMode = ThemeData(
       //   letterSpacing: 1.3,
       // ),
       ),
-  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     selectedLabelStyle: TextStyle(fontSize: 19),
     selectedIconTheme: IconThemeData(size: 26),
     unselectedLabelStyle: TextStyle(
@@ -106,17 +106,6 @@ ThemeData LightMode = ThemeData(
         fontWeight: FontWeight.bold,
         color: Colors.black,
         letterSpacing: 1.4),
-    subtitle2: TextStyle(
-        fontSize: 18,
-        color: Colors.black,
-        letterSpacing: 1.3,
-        overflow: TextOverflow.ellipsis
-    ),
-    subtitle1: TextStyle(
-      fontSize: 15,
-      color: Colors.black,
-      letterSpacing: 1.3
-    ),
     headline2: TextStyle(
       fontStyle: FontStyle.italic,
       fontSize: 25,
@@ -125,12 +114,22 @@ ThemeData LightMode = ThemeData(
     headline4:
         TextStyle(fontSize: 40.0, color: Colors.black,letterSpacing: 2.5, height: 1),
     // Normal Text
+    subtitle1: const TextStyle(
+        fontSize: 15,
+        color: Colors.black,
+        letterSpacing: 1.3
+    ),
+    subtitle2: const TextStyle(
+        fontSize: 18,
+        color: Colors.black,
+        letterSpacing: 1.3,
+        overflow: TextOverflow.ellipsis
+    ),
     bodyText1: TextStyle(
       fontSize: 25,
       fontWeight: FontWeight.w800,
       color: Colors.black,
     ),
-
     // Label Style in TextFormField
     bodyText2: TextStyle(
       fontSize: 15,

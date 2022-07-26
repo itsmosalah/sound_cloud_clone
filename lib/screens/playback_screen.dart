@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sound_cloud_clone/cubits/login&Register/cubit.dart';
 import 'package:sound_cloud_clone/cubits/theme_manager/cubit.dart';
+import '../components/components.dart';
 import '../components/constants.dart';
 import '../cubits/music_manager/cubit.dart';
 import '../cubits/music_manager/states.dart';
@@ -23,8 +24,7 @@ class _PlaybackScreenState extends State<PlaybackScreen>
     var cubit = SoundCloudMusicManagerCubit.get(context);
 
     //this should be called once, loading the playlist into a cubit for accessing
-    cubit.loadPlayLists();
-    var userCubit = SoundCloudLoginAndRegCubit();
+    //cubit.loadPlayLists();
     if (!cubit.stillPlaying) {
       cubit.togglePlayer();
     }
@@ -53,8 +53,56 @@ class _PlaybackScreenState extends State<PlaybackScreen>
             actions: [
               IconButton(
                 onPressed: () {
-                  //this should only be called once upon log in AND when user modifies playlist
-                  userCubit.updatePlaylists(cubit.userPlaylists);
+                  showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: defaultText(text: 'Choose a Playlist'),
+                        content: Column(
+                          children: [
+                            /*ListView.separated(
+                              itemBuilder: (context, index){
+                                return InkWell(
+                                  onTap: (){
+
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(20.0),
+                                    child: Row(
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            defaultText(
+                                                text: cubit.userPlaylists[index].name.toString(),
+                                                myStyle: Theme
+                                                    .of(context)
+                                                    .textTheme
+                                                    .subtitle2
+                                            ),
+                                            defaultText(
+                                                text: "Number of tracks ${cubit.userPlaylists[index].size}",
+                                                myStyle: Theme
+                                                    .of(context)
+                                                    .textTheme
+                                                    .bodyText2
+                                            ),
+                                          ],
+                                        ),
+                                        Spacer(),
+                                        Icon(Icons.arrow_forward_ios),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                              separatorBuilder: (context, index) => myDivider(),
+                              itemCount: cubit.userPlaylists.length,
+
+                            ),*/
+                          ],
+                        ),
+                      )
+                  );
                   Fluttertoast.showToast(
                       msg: 'Added to Playlist',
                       backgroundColor: Colors.green,
@@ -76,152 +124,159 @@ class _PlaybackScreenState extends State<PlaybackScreen>
                         spawnMaxSpeed: 30),
                   ),
                   vsync: this,
-                  child: playBackWidget(),
+                  child: playBackWidget(cubit),
                 )
-              : playBackWidget()),
+              : playBackWidget(cubit)),
     );
   }
 
-  Widget playBackWidget() {
-    var cubit = SoundCloudMusicManagerCubit.get(context);
-    return Padding(
-      padding: const EdgeInsets.all(18.0),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            CircleAvatar(
-              backgroundImage: NetworkImage(cubit.nowPlaying.image640URL),
-              radius: 150,
-            ),
-            Container(
-              margin: EdgeInsets.only(left: 16, top: 40),
-              child: Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(cubit.nowPlaying.name,
-                          style: Theme.of(context).textTheme.headline4),
-                      Container(
-                        margin: EdgeInsets.only(left: 3),
-                        child: Text(cubit.nowPlaying.artistName,
-                            style: Theme.of(context).textTheme.bodyText2),
-                      ),
-                    ],
-                  ),
-                ],
+  Widget playBackWidget(cubit) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(18.0),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              CircleAvatar(
+                backgroundImage: NetworkImage(cubit.nowPlaying.image640URL),
+                radius: 150,
               ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Slider(
-              value: cubit.getPosition().toDouble(),
-              onChanged: (value) async {
-                cubit.slideTo(value);
-              },
-              min: 0,
-              max: 30,
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Container(
+                margin: EdgeInsets.only(left: 16, top: 40),
+                child: Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 330,
+                          child: defaultText(
+                              text: cubit.nowPlaying.name,
+                              myStyle: Theme.of(context).textTheme.headline4,
+                              textOverflow: TextOverflow.ellipsis
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 3),
+                          child: Text(cubit.nowPlaying.artistName,
+                              style: Theme.of(context).textTheme.bodyText2),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Slider(
+                value: cubit.getPosition().toDouble(),
+                onChanged: (value) {
+                  cubit.slideTo(value);
+                },
+                min: 0,
+                max: 30,
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(formattedTime(cubit.getPosition())),
+                    InkWell(
+                      onTap: () {
+                        cubit.cycleSpeed();
+                      },
+                      child: Text(
+                        "x${cubit.getCurrentSpeed()}",
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                    Text(formattedTime(cubit.duration)),
+                  ],
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(formattedTime(cubit.getPosition())),
+                  InkWell(
+                    customBorder: const CircleBorder(),
+                    onTap: () {
+                      cubit.rewind(5);
+                    },
+                    child: Stack(
+                      children: const [
+                        CircleAvatar(
+                          backgroundColor: defaultColor,
+                          radius: 25,
+                        ),
+                        Positioned(
+                          bottom: 10,
+                          right: 10,
+                          child: Icon(
+                            Icons.keyboard_double_arrow_left,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   InkWell(
                     onTap: () {
-                      cubit.cycleSpeed();
+                      cubit.togglePlayer();
                     },
-                    child: Text(
-                      "x${cubit.getCurrentSpeed()}",
-                      style: const TextStyle(
-                        fontSize: 18,
+                    customBorder: const CircleBorder(),
+                    child: Stack(children: [
+                      const CircleAvatar(
+                        backgroundColor: defaultColor,
+                        radius: 45,
                       ),
+                      Positioned(
+                        bottom: 15,
+                        right: 15,
+                        child: Icon(
+                          cubit.playerButtonIcon,
+                          color: Colors.white,
+                          size: 60,
+                        ),
+                      ),
+                    ]),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      //forwards
+                      cubit.fastForward(5);
+                    },
+                    customBorder: const CircleBorder(),
+                    child: Stack(
+                      children: const [
+                        CircleAvatar(
+                          backgroundColor: defaultColor,
+                          radius: 25,
+                        ),
+                        Positioned(
+                          bottom: 10,
+                          right: 7,
+                          child: Icon(
+                            Icons.keyboard_double_arrow_right,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Text(formattedTime(cubit.duration)),
                 ],
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                InkWell(
-                  customBorder: const CircleBorder(),
-                  onTap: () {
-                    cubit.rewind(5);
-                  },
-                  child: Stack(
-                    children: const [
-                      CircleAvatar(
-                        backgroundColor: defaultColor,
-                        radius: 25,
-                      ),
-                      Positioned(
-                        bottom: 10,
-                        right: 10,
-                        child: Icon(
-                          Icons.keyboard_double_arrow_left,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    cubit.togglePlayer();
-                  },
-                  customBorder: const CircleBorder(),
-                  child: Stack(children: [
-                    const CircleAvatar(
-                      backgroundColor: defaultColor,
-                      radius: 45,
-                    ),
-                    Positioned(
-                      bottom: 15,
-                      right: 15,
-                      child: Icon(
-                        cubit.playerButtonIcon,
-                        color: Colors.white,
-                        size: 60,
-                      ),
-                    ),
-                  ]),
-                ),
-                InkWell(
-                  onTap: () {
-                    //forwards
-                    cubit.fastForward(5);
-                  },
-                  customBorder: const CircleBorder(),
-                  child: Stack(
-                    children: const [
-                      CircleAvatar(
-                        backgroundColor: defaultColor,
-                        radius: 25,
-                      ),
-                      Positioned(
-                        bottom: 10,
-                        right: 7,
-                        child: Icon(
-                          Icons.keyboard_double_arrow_right,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 25,
-            ),
-          ],
+              const SizedBox(
+                height: 25,
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -6,3 +6,10 @@ class SoundCloudPlayingNowState extends SoundCloudMusicManagerStates{}
 class SoundCloudPausedState extends SoundCloudMusicManagerStates{}
 class SoundCloudGotTrackDataState extends SoundCloudMusicManagerStates{}
 class SoundCloudMoveSliderState extends SoundCloudMusicManagerStates{}
+
+
+class SoundCloudAddPlaylistSuccessState extends SoundCloudMusicManagerStates{}
+class SoundCloudAddPlaylistErrorState extends SoundCloudMusicManagerStates{}
+
+class SoundCloudUpdatePlaylistSuccessState extends SoundCloudMusicManagerStates{}
+class SoundCloudUpdatePlaylistErrorState extends SoundCloudMusicManagerStates{}

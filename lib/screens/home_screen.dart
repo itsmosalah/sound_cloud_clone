@@ -32,6 +32,10 @@ class HomeScreen extends StatelessWidget {
             items: [
               BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
               BottomNavigationBarItem(
+                  icon: Icon(Icons.format_list_bulleted_sharp),
+                label: "Playlists"
+              ),
+              BottomNavigationBarItem(
                   icon: Icon(Icons.settings), label: "Settings"),
             ],
           ),

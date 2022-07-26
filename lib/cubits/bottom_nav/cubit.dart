@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sound_cloud_clone/cubits/bottom_nav/states.dart';
+import 'package:sound_cloud_clone/screens/playlists_screen.dart';
 import 'package:sound_cloud_clone/screens/settings_screen.dart';
 import 'package:sound_cloud_clone/screens/tracks_screen.dart';
 
@@ -19,6 +20,7 @@ class BottomNavCubit extends Cubit<BottomNavStates>
   List<Widget> bottomNavScreens=
   [
     TracksScreen(),
+    PlayListsScreen(),
     SettingsScreen()
   ];
 

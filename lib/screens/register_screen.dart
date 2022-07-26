@@ -53,7 +53,7 @@ class RegisterScreen extends StatelessWidget {
                   defaultTextField(
                     labeltxt: 'Username',
                     controller: nameController,
-                    prefixicon: Icon(Icons.person),
+                    prefixIcon: Icon(Icons.person),
                     txtinput: TextInputType.name,
                     suffix: Icons.clear,
                     SuffixPressed: () {
@@ -66,7 +66,7 @@ class RegisterScreen extends StatelessWidget {
                   defaultTextField(
                     labeltxt: 'Phone',
                     controller: phoneController,
-                    prefixicon: Icon(Icons.phone),
+                    prefixIcon: Icon(Icons.phone),
                     txtinput: TextInputType.phone,
                     suffix: Icons.clear,
                     SuffixPressed: () {
@@ -79,7 +79,7 @@ class RegisterScreen extends StatelessWidget {
                   defaultTextField(
                     labeltxt: 'Email Address',
                     controller: emailController,
-                    prefixicon: Icon(Icons.email_outlined),
+                    prefixIcon: Icon(Icons.email_outlined),
                     txtinput: TextInputType.emailAddress,
                     suffix: Icons.clear,
                     SuffixPressed: () {
@@ -93,7 +93,7 @@ class RegisterScreen extends StatelessWidget {
                     labeltxt: 'Password',
                     isPass: cubit.isPass,
                     controller: passwordController,
-                    prefixicon: Icon(Icons.lock_outline),
+                    prefixIcon: Icon(Icons.lock_outline),
                     txtinput: TextInputType.visiblePassword,
                     suffix: cubit.isPass
                         ? Icons.remove_red_eye

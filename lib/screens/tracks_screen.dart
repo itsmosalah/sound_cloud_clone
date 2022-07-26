@@ -8,6 +8,7 @@ import 'package:sound_cloud_clone/cubits/login&Register/cubit.dart';
 import 'package:sound_cloud_clone/cubits/music_manager/cubit.dart';
 import 'package:sound_cloud_clone/cubits/music_manager/states.dart';
 import 'package:sound_cloud_clone/cubits/theme_manager/cubit.dart';
+import 'package:sound_cloud_clone/models/track_data.dart';
 import 'package:sound_cloud_clone/screens/playback_screen.dart';
 import 'package:we_slide/we_slide.dart';
 
@@ -23,20 +24,11 @@ class TracksScreen extends StatelessWidget {
       builder: (BuildContext context, state) {
         var cubit = SoundCloudMusicManagerCubit.get(context);
         // cubit.setTrackList();
-        cubit.setNowPlaying();
-
+        // cubit.setNowPlaying(); idk why
+        cubit.getTrack("dummy");
+        cubit.loadPlayLists();
         return Scaffold(
-          appBar: AppBar(
-            title: Text(
-              'SoundCloud',
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headline1,
-            ),
-            centerTitle: true,
-            backgroundColor: defaultColor,
-          ),
+          appBar: myAppBar(context, title: 'SoundCloud'),
           body: ConditionalBuilder(
             condition: state is SoundCloudGotTrackDataState,
             builder: (context) {
@@ -77,17 +69,27 @@ class TracksScreen extends StatelessWidget {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  defaultText(
-                                      text: cubit.nowPlaying.name,
-                                      fontsize: 18,
-                                      textColor: Colors.black),
+                                  Container(
+                                    width: 170,
+                                    child: defaultText(
+                                        text: cubit.nowPlaying.name,
+                                        fontSize: 18,
+                                        textColor: Colors.black,
+                                      textOverflow: TextOverflow.ellipsis
+                                    ),
+                                  ),
                                   SizedBox(
                                     height: 5,
                                   ),
-                                  defaultText(
-                                      text: cubit.nowPlaying.artistName,
-                                      textColor: Colors.grey[600],
-                                      fontsize: 15),
+                                  Container(
+                                    width: 170,
+                                    child: defaultText(
+                                        text: cubit.nowPlaying.artistName,
+                                        textColor: Colors.grey[600],
+                                        fontSize: 15,
+                                      textOverflow: TextOverflow.ellipsis
+                                    ),
+                                  ),
                                 ],
                               ),
                               Spacer(),
@@ -96,7 +98,8 @@ class TracksScreen extends StatelessWidget {
                                 child: IconButton(
                                   onPressed: () {
                                     cubit.setUrlSrc(cubit.nowPlaying.previewURL);
-
+                                    cubit.togglePlayer();
+                                    // cubit.setNowPlaying(cubit.nowPlaying);
                                     Navigator.push(
                                         context,
                                         PageTransition(
@@ -143,12 +146,15 @@ class TracksScreen extends StatelessWidget {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                cubit.nowPlaying.name,
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .subtitle2,
+                              Container(
+                                width: 190,
+                                child: Text(
+                                  cubit.nowPlaying.name,
+                                  style: Theme
+                                      .of(context)
+                                      .textTheme
+                                      .subtitle2,
+                                ),
                               ),
                               SizedBox(
                                 height: 5,
