@@ -35,62 +35,69 @@ class TracksScreen extends StatelessWidget {
 
         cubit.loadMainScreenContent();
 
-        return Scaffold(
-          appBar: myAppBar(
-            context,
-            title: 'SoundCloud',
-            myActions: [
-              IconButton(onPressed: (){
-                navigateTo(context, SearchScreen());
-              }, icon: Icon(Icons.search))
-            ]
-          ),
-
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  defaultText(
-                      text: 'Albums:',
-                      myStyle: Theme.of(context).textTheme.headline3
-                  ),
-                  SizedBox(height: 10),
-                  Container(
-                    height: 200,
-                    child: ListView.separated(
-                      physics: BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index){
-                          return buildAlbum(cubit.mainScreenAlbums[index], cubit, context);
-                        },
-                        itemCount: cubit.mainScreenAlbums.length,
-                      separatorBuilder: (context, index) {
-                        return SizedBox(width: 20,);
-                      },
-                    ),
-
-                  ),
-                  const SizedBox(height: 30,),
-                  defaultText(
-                      text: 'Tracks:',
-                      myStyle: Theme.of(context).textTheme.headline3
-                  ),
-
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      itemBuilder: (context, index){
-                        return buildTrack(cubit.mainScreenTracks[index], context, cubit);
-                      },
-                    itemCount: cubit.mainScreenTracks.length,
-                  ),
-                ],
+        return ConditionalBuilder(
+          condition: cubit.mainScreenContentLoaded,
+          builder: (context) => Scaffold(
+              appBar: myAppBar(
+                  context,
+                  title: 'SoundCloud',
+                  myActions: [
+                    IconButton(onPressed: (){
+                      navigateTo(context, const SearchScreen());
+                    }, icon: const Icon(Icons.search))
+                  ]
               ),
-            ),
-          )
+
+              body: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      defaultText(
+                          text: 'Albums:',
+                          myStyle: Theme.of(context).textTheme.headline3
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        height: 190,
+                        child: ListView.separated(
+                          physics: BouncingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index){
+                            return buildAlbum(cubit.mainScreenAlbums[index], cubit, context);
+                          },
+                          itemCount: cubit.mainScreenAlbums.length,
+                          separatorBuilder: (context, index) {
+                            return SizedBox(width: 20,);
+                          },
+                        ),
+
+                      ),
+                      myDivider(),
+                      const SizedBox(height: 20,),
+                      defaultText(
+                          text: 'Tracks:',
+                          myStyle: Theme.of(context).textTheme.headline3
+                      ),
+
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (context, index){
+                          return buildTrack(cubit.mainScreenTracks[index], context, cubit);
+                        },
+                        itemCount: cubit.mainScreenTracks.length,
+                      ),
+                    ],
+                  ),
+                ),
+              )
+          ),
+          fallback: (context) => const Center(
+            child: CircularProgressIndicator(),
+          ),
         );
       },
       listener: (BuildContext context, Object? state) {},
@@ -100,7 +107,7 @@ class TracksScreen extends StatelessWidget {
     return InkWell(
       onTap: (){
         cubit.setAlbum(albumData);
-        navigateTo(context, AlbumTracksScreen());
+        navigateTo(context, const AlbumTracksScreen());
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,13 +132,13 @@ class TracksScreen extends StatelessWidget {
     return InkWell(
       onTap: (){
         cubit.nowPlaying = track;
-        navigateTo(context, PlaybackScreen());
+        navigateTo(context, const PlaybackScreen());
       },
       child: Row(
         children: [
           Container(
             width: 100,
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Image(
               image: NetworkImage(track.image64URL),
             ),
@@ -139,7 +146,7 @@ class TracksScreen extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
+              SizedBox(
                 width: 100,
                 child: defaultText(
                   text: track.name,
@@ -149,15 +156,15 @@ class TracksScreen extends StatelessWidget {
               defaultText(text: track.albumName),
             ],
           ),
-          Spacer(),
+          const Spacer(),
           CircleAvatar(
           backgroundColor: defaultColor,
           child: IconButton(
             onPressed:  ()  {
               cubit.nowPlaying = track;
-              navigateTo(context, PlaybackScreen());
+              navigateTo(context, const PlaybackScreen());
             },
-            icon: Icon(Icons.play_arrow),
+            icon: const Icon(Icons.play_arrow),
             color: ThemeManagerCubit
                 .get(context)
                 .isDark

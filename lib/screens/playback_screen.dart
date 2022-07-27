@@ -30,10 +30,10 @@ class _PlaybackScreenState extends State<PlaybackScreen>
 
     //this should be called once, loading the playlist into a cubit for accessing
     //cubit.loadPlayLists();
-    if (!cubit.stillPlaying) {
+    /*if (!cubit.stillPlaying) {
       cubit.togglePlayer();
     }
-    cubit.stillPlaying = false;
+    cubit.stillPlaying = false;*/
     return BlocConsumer<MusicPlaybackCubit,
         MusicPlaybackStates>(
       listener: (BuildContext context, state) {},
@@ -43,7 +43,7 @@ class _PlaybackScreenState extends State<PlaybackScreen>
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.keyboard_arrow_down_outlined,
                   size: 40,
                 )),
@@ -61,77 +61,77 @@ class _PlaybackScreenState extends State<PlaybackScreen>
                   showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                            title: defaultText(text: 'Choose a Playlist'),
-                            content: Container(
-                              width: 300,
-                              child: ListView.separated(
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  return InkWell(
-                                    onTap: () {
-                                      bool newSong = false;
-                                      manager.userPlaylists[index].trackList
-                                          .forEach((element) {
-                                        if (element.name !=
-                                            cubit.activeTrack.name) {
-                                          newSong = true;
-                                        } else {
-                                          newSong = false;
-                                        }
-                                      });
-                                      if (newSong || manager.userPlaylists[index].size==0) {
-                                        manager.userPlaylists[index]
-                                            .addTrack(cubit.activeTrack);
-                                        manager.updatePlaylists();
-                                        Fluttertoast.showToast(
-                                            msg:
-                                                'Added to ${manager.userPlaylists[index].name}',
-                                            backgroundColor: defaultColor,
-                                            textColor: Colors.white);
-                                      } else {
-                                        Fluttertoast.showToast(
-                                            msg:
-                                                'This Song is Already exists in this Playlist',
-                                            backgroundColor: Colors.red,
-                                            textColor: Colors.white);
-                                      }
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(20.0),
-                                      child: Row(
+                        title: defaultText(text: 'Choose a Playlist'),
+                        content: Container(
+                          width: 300,
+                          child: ListView.separated(
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                onTap: () {
+                                  bool newSong = false;
+                                  manager.userPlaylists[index].trackList
+                                      .forEach((element) {
+                                    if (element.name !=
+                                        cubit.activeTrack.name) {
+                                      newSong = true;
+                                    } else {
+                                      newSong = false;
+                                    }
+                                  });
+                                  if (newSong || manager.userPlaylists[index].size==0) {
+                                    manager.userPlaylists[index]
+                                        .addTrack(cubit.activeTrack);
+                                    manager.updatePlaylists();
+                                    Fluttertoast.showToast(
+                                        msg:
+                                        'Added to ${manager.userPlaylists[index].name}',
+                                        backgroundColor: defaultColor,
+                                        textColor: Colors.white);
+                                  } else {
+                                    Fluttertoast.showToast(
+                                        msg:
+                                        'This Song is Already exists in this Playlist',
+                                        backgroundColor: Colors.red,
+                                        textColor: Colors.white);
+                                  }
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Row(
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                         children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              defaultText(
-                                                  text: manager
-                                                      .userPlaylists[index]
-                                                      .name,
-                                                  myStyle: Theme.of(context)
-                                                      .textTheme
-                                                      .subtitle2),
-                                              defaultText(
-                                                  text: "Number of tracks = " +
-                                                      '${manager.userPlaylists[index].size}',
-                                                  myStyle: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyText2),
-                                            ],
-                                          ),
-                                          Spacer(),
-                                          Icon(Icons.arrow_forward_ios),
+                                          defaultText(
+                                              text: manager
+                                                  .userPlaylists[index]
+                                                  .name,
+                                              myStyle: Theme.of(context)
+                                                  .textTheme
+                                                  .subtitle2),
+                                          defaultText(
+                                              text: "Number of tracks = " +
+                                                  '${manager.userPlaylists[index].size}',
+                                              myStyle: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText2),
                                         ],
                                       ),
-                                    ),
-                                  );
-                                },
-                                separatorBuilder: (context, index) =>
-                                    myDivider(),
-                                itemCount: manager.userPlaylists.length,
-                              ),
-                            ),
-                          ));
+                                      Spacer(),
+                                      Icon(Icons.arrow_forward_ios),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            separatorBuilder: (context, index) =>
+                                myDivider(),
+                            itemCount: manager.userPlaylists.length,
+                          ),
+                        ),
+                      ));
                 },
                 icon: Icon(
                   Icons.add,
@@ -142,15 +142,15 @@ class _PlaybackScreenState extends State<PlaybackScreen>
           ),
           body: cubit.isPlaying
               ? AnimatedBackground(
-                  behaviour: RandomParticleBehaviour(
-                    options: ParticleOptions(
-                        baseColor: defaultColor,
-                        spawnMinSpeed: 10,
-                        spawnMaxSpeed: 30),
-                  ),
-                  vsync: this,
-                  child: playBackWidget(cubit),
-                )
+            behaviour: RandomParticleBehaviour(
+              options: ParticleOptions(
+                  baseColor: defaultColor,
+                  spawnMinSpeed: 10,
+                  spawnMaxSpeed: 30),
+            ),
+            vsync: this,
+            child: playBackWidget(cubit),
+          )
               : playBackWidget(cubit)),
     );
   }
@@ -191,7 +191,7 @@ class _PlaybackScreenState extends State<PlaybackScreen>
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               Slider(

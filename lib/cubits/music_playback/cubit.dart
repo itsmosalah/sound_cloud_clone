@@ -19,6 +19,9 @@ class MusicPlaybackCubit extends Cubit<MusicPlaybackStates> {
 
   void setActiveTrack(TrackDataPlayback track){
     activeTrack = track;
+    if (isPlaying){
+      togglePlayer();
+    }
     setUrlSrc(track.previewURL);
     //togglePlayer();
   }
@@ -38,6 +41,7 @@ class MusicPlaybackCubit extends Cubit<MusicPlaybackStates> {
 
   int getPosition() {
     int value = audioPlayer.position.inSeconds;
+    emit(MusicPlaybackGetPositionState());
     return value;
   }
 

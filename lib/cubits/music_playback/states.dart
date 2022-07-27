@@ -9,6 +9,8 @@ class MusicPlaybackPlayErrorState extends MusicPlaybackStates {}
 class MusicPlaybackMoveSliderState extends MusicPlaybackStates {}
 class MusicPlaybackLoadPlaylistState extends MusicPlaybackStates {}
 
+class MusicPlaybackGetPositionState extends MusicPlaybackStates {}
+
 class MusicPlaybackPlaylistsLoadedSuccessState extends MusicPlaybackStates {}
 class MusicPlaybackUpdatePlaylistSuccessState extends MusicPlaybackStates {}
 class MusicPlaybackUpdatePlaylistErrorState extends MusicPlaybackStates {}
