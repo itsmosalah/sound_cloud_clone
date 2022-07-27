@@ -20,6 +20,7 @@ class AlbumData {
       trackList.add(TrackDataPlayback.fromAlbumJson(element, [
         image640URL, image300URL, image64URL
       ]));
+      trackList.last.albumName = name;
     });
   }
 

@@ -16,3 +16,6 @@ class SoundCloudAddPlaylistErrorState extends SoundCloudMusicManagerStates{}
 
 class SoundCloudUpdatePlaylistSuccessState extends SoundCloudMusicManagerStates{}
 class SoundCloudUpdatePlaylistErrorState extends SoundCloudMusicManagerStates{}
+
+class SoundCloudSearchSuccessState extends SoundCloudMusicManagerStates{}
+class SoundCloudSearchErrorState extends SoundCloudMusicManagerStates{}

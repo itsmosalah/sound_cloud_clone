@@ -7,7 +7,6 @@ class SearchResults {
     json["tracks"]["items"].forEach((element){
       trackList.add(TrackDataPreview.fromJson(element["data"]));
     });
-    print("HELLOO FINISHED");
   }
 
   SearchResults();

@@ -23,25 +23,21 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
 
   List<TrackDataPreview> trackList = [];
 
-  void setTrackList() {
+  /*void setTrackList() {
     // Map<String,dynamic> mp =
     SoundAPI.getSearchResults("ay 7aga").then((value) {
       trackList = getTrackList(value);
     });
-  }
+  }*/
 
   TrackDataPlayback nowPlaying = TrackDataPlayback();
 
-  /*void setNowPlaying(TrackDataPlayback track) {
-    emit(SoundCloudMusicManagerLoadingState());
-    setUrlSrc(track.previewURL).then(
-        (value){
-          print("url set");
-          nowPlaying = track;
-          emit(SoundCloudGotTrackDataState());
-        }
-    );
-  }*/
+  //called after setting the track to nowPlaying and ready to play
+  void setNowPlaying()async {
+    await audioPlayer.setUrl(nowPlaying.previewURL);
+    await audioPlayer.play();
+  }
+
   bool playlistsLoaded = false;
 
   TrackDataPlayback getTrack(String id) {
@@ -49,16 +45,15 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
     //and then it should check the set of loaded tracks
 
     emit(SoundCloudMusicManagerLoadingState());
-    SoundAPI api = SoundAPI();
     //if not loaded already, request it from api
-    api.getTrack(id).then((value) {
+    SoundAPI.getTrackAPI(id).then((value) {
       nowPlaying = value;
+      setNowPlaying();
       emit(SoundCloudGotTrackAndPlaylistsState());
       if (!playlistsLoaded) {
         loadPlayLists();
         playlistsLoaded = true;
       }
-
     });
 
     return nowPlaying;
@@ -198,4 +193,16 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
 
   SearchResults searchResults = SearchResults();
 
+  void setSearchResults(String searchQuery) {
+    SoundAPI.getSearchResults(searchQuery).then((value) {
+      searchResults = SearchResults.fromJson(value);
+      emit(SoundCloudSearchSuccessState());
+      },
+      onError: (e){
+        print('Search error : $e');
+        emit(SoundCloudSearchErrorState());
+      }
+    );
+
+  }
 }
