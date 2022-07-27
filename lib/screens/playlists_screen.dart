@@ -97,7 +97,7 @@ class PlayListsScreen extends StatelessWidget {
             ),
           ]),
           body: ConditionalBuilder(
-            condition: state is SoundCloudPlaylistsLoadedSuccessState,
+            condition: cubit.playlistsLoaded,
             builder: (context) => ListView.separated(
               itemBuilder: (context, index) {
                 return InkWell(

@@ -49,6 +49,19 @@ class TrackDataPlayback extends TrackData {
       "artists" : [{"name" : artistName}]
     };
   }
+
+
+  TrackDataPlayback.fromAlbumJson(Map <String, dynamic> json, List<String>images){
+    id = json["id"];
+    previewURL = json["preview_url"];
+    name = json["name"];
+    artistName = json["artists"][0]["name"];
+    image640URL = images[0];
+    image300URL = images[0];
+    image64URL = images[0];
+    name.replaceAll("\"", " ");
+  }
+
 }
 
 /*

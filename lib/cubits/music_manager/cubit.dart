@@ -9,7 +9,9 @@ import 'package:sound_cloud_clone/components/constants.dart';
 import 'package:sound_cloud_clone/cubits/login&Register/states.dart';
 import 'package:sound_cloud_clone/cubits/music_manager/states.dart';
 import 'package:sound_cloud_clone/models/playlist.dart';
+import 'package:sound_cloud_clone/models/search_results.dart';
 
+import '../../models/album_data.dart';
 import '../../models/track_data.dart';
 import '../../shared/network/remote/sound_api.dart';
 import '../login&Register/cubit.dart';
@@ -22,9 +24,8 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
   List<TrackDataPreview> trackList = [];
 
   void setTrackList() {
-    SoundAPI api = SoundAPI();
     // Map<String,dynamic> mp =
-    api.getSearchResults("ay 7aga").then((value) {
+    SoundAPI.getSearchResults("ay 7aga").then((value) {
       trackList = getTrackList(value);
     });
   }
@@ -41,7 +42,7 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
         }
     );
   }*/
-  bool loaded = false;
+  bool playlistsLoaded = false;
 
   TrackDataPlayback getTrack(String id) {
     //this should take the track id string
@@ -53,9 +54,9 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
     api.getTrack(id).then((value) {
       nowPlaying = value;
       emit(SoundCloudGotTrackAndPlaylistsState());
-      if (!loaded) {
+      if (!playlistsLoaded) {
         loadPlayLists();
-        loaded = true;
+        playlistsLoaded = true;
       }
 
     });
@@ -189,4 +190,12 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
       emit(SoundCloudUpdatePlaylistErrorState());
     });
   }
+
+  AlbumData spaghettiAlbum = AlbumData();
+  void setAlbum() async {
+    spaghettiAlbum = await SoundAPI.getAlbum("some id");
+  }
+
+  SearchResults searchResults = SearchResults();
+
 }
