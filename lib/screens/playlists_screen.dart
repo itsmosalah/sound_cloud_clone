@@ -16,8 +16,15 @@ class PlayListsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var nameController = TextEditingController();
 
-    return BlocConsumer<SoundCloudMusicManagerCubit,
-        SoundCloudMusicManagerStates>(
+    var cubit = MusicManagerCubit.get(context);
+
+    //USER PLAYLISTS LOADED
+    if (!cubit.playlistsLoaded){
+      cubit.loadPlayLists();
+    }
+
+    return BlocConsumer<MusicManagerCubit,
+        MusicManagerStates>(
       listener: (BuildContext context, Object? state) {
         if (state is SoundCloudAddPlaylistSuccessState) {
           Fluttertoast.showToast(
@@ -32,7 +39,7 @@ class PlayListsScreen extends StatelessWidget {
         }
       },
       builder: (BuildContext context, state) {
-        var cubit = SoundCloudMusicManagerCubit.get(context);
+
 
         return Scaffold(
           appBar: myAppBar(context, title: "Playlists", myActions: [

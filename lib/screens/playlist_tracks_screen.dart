@@ -17,10 +17,10 @@ class PlayListTracksScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
 
-    return BlocConsumer<SoundCloudMusicManagerCubit,SoundCloudMusicManagerStates>(
+    return BlocConsumer<MusicManagerCubit,MusicManagerStates>(
       listener: (BuildContext context, Object? state) {},
       builder: (BuildContext context, state){
-        var cubit = SoundCloudMusicManagerCubit.get(context);
+        var cubit = MusicManagerCubit.get(context);
         Playlist currentPlaylist = cubit.userPlaylists[playlistIndex];
 
         return Scaffold(
@@ -44,7 +44,10 @@ class PlayListTracksScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(18.0),
                   child: Row(
                     children: [
-                      Image(image: NetworkImage(currentPlaylist.trackList[index].image64URL)),
+                      Image(
+                          image: NetworkImage(currentPlaylist.trackList[index].image64URL),
+                        width: 50,
+                      ),
                       SizedBox(width: 15),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,8 +99,6 @@ class PlayListTracksScreen extends StatelessWidget {
                         child: IconButton(
                           onPressed: ()  {
                             cubit.nowPlaying = currentPlaylist.trackList[index];
-                            cubit.setUrlSrc(currentPlaylist.trackList[index].previewURL);
-                            cubit.togglePlayer();
                             navigateTo(context, PlaybackScreen());
                           },
                           icon: Icon(Icons.play_arrow),

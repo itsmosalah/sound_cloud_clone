@@ -17,10 +17,10 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var searchController = TextEditingController();
 
-    var cubit = SoundCloudMusicManagerCubit.get(context);
+    var cubit = MusicManagerCubit.get(context);
 
-    return BlocConsumer<SoundCloudMusicManagerCubit,
-        SoundCloudMusicManagerStates>(
+    return BlocConsumer<MusicManagerCubit,
+        MusicManagerStates>(
       builder: (BuildContext context, state){
 
         return Scaffold(
@@ -89,7 +89,8 @@ class SearchScreen extends StatelessWidget {
                               backgroundColor: defaultColor,
                               child: IconButton(
                                 onPressed: ()  {
-                                  /*cubit.nowPlaying =*/ cubit.getTrack(cubit.searchResults.trackList[index].id);
+                                  /*cubit.nowPlaying =*/
+                                  cubit.getTrack(cubit.searchResults.trackList[index].id);
                                   // cubit.setNowPlaying();
                                   //use the index to access trackdata then id
                                   //then use id to get track using api

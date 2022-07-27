@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sound_cloud_clone/cubits/login&Register/cubit.dart';
+import 'package:sound_cloud_clone/cubits/music_playback/cubit.dart';
+import 'package:sound_cloud_clone/cubits/music_playback/states.dart';
 import 'package:sound_cloud_clone/cubits/theme_manager/cubit.dart';
 import 'package:sound_cloud_clone/models/playlist.dart';
 import '../components/components.dart';
@@ -22,7 +24,9 @@ class _PlaybackScreenState extends State<PlaybackScreen>
     with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    var cubit = SoundCloudMusicManagerCubit.get(context);
+    var cubit = MusicPlaybackCubit.get(context);
+    var manager = MusicManagerCubit.get(context);
+    cubit.setActiveTrack(manager.nowPlaying);
 
     //this should be called once, loading the playlist into a cubit for accessing
     //cubit.loadPlayLists();
@@ -30,8 +34,8 @@ class _PlaybackScreenState extends State<PlaybackScreen>
       cubit.togglePlayer();
     }
     cubit.stillPlaying = false;
-    return BlocConsumer<SoundCloudMusicManagerCubit,
-        SoundCloudMusicManagerStates>(
+    return BlocConsumer<MusicPlaybackCubit,
+        MusicPlaybackStates>(
       listener: (BuildContext context, state) {},
       builder: (BuildContext context, Object? state) => Scaffold(
           appBar: AppBar(
@@ -66,22 +70,22 @@ class _PlaybackScreenState extends State<PlaybackScreen>
                                   return InkWell(
                                     onTap: () {
                                       bool newSong = false;
-                                      cubit.userPlaylists[index].trackList
+                                      manager.userPlaylists[index].trackList
                                           .forEach((element) {
                                         if (element.name !=
-                                                cubit.nowPlaying.name) {
+                                            cubit.activeTrack.name) {
                                           newSong = true;
                                         } else {
                                           newSong = false;
                                         }
                                       });
-                                      if (newSong || cubit.userPlaylists[index].size==0) {
-                                        cubit.userPlaylists[index]
-                                            .addTrack(cubit.nowPlaying);
-                                        cubit.updatePlaylists();
+                                      if (newSong || manager.userPlaylists[index].size==0) {
+                                        manager.userPlaylists[index]
+                                            .addTrack(cubit.activeTrack);
+                                        manager.updatePlaylists();
                                         Fluttertoast.showToast(
                                             msg:
-                                                'Added to ${cubit.userPlaylists[index].name}',
+                                                'Added to ${manager.userPlaylists[index].name}',
                                             backgroundColor: defaultColor,
                                             textColor: Colors.white);
                                       } else {
@@ -101,7 +105,7 @@ class _PlaybackScreenState extends State<PlaybackScreen>
                                                 CrossAxisAlignment.start,
                                             children: [
                                               defaultText(
-                                                  text: cubit
+                                                  text: manager
                                                       .userPlaylists[index]
                                                       .name,
                                                   myStyle: Theme.of(context)
@@ -109,7 +113,7 @@ class _PlaybackScreenState extends State<PlaybackScreen>
                                                       .subtitle2),
                                               defaultText(
                                                   text: "Number of tracks = " +
-                                                      '${cubit.userPlaylists[index].size}',
+                                                      '${manager.userPlaylists[index].size}',
                                                   myStyle: Theme.of(context)
                                                       .textTheme
                                                       .bodyText2),
@@ -124,7 +128,7 @@ class _PlaybackScreenState extends State<PlaybackScreen>
                                 },
                                 separatorBuilder: (context, index) =>
                                     myDivider(),
-                                itemCount: cubit.userPlaylists.length,
+                                itemCount: manager.userPlaylists.length,
                               ),
                             ),
                           ));
@@ -160,7 +164,7 @@ class _PlaybackScreenState extends State<PlaybackScreen>
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               CircleAvatar(
-                backgroundImage: NetworkImage(cubit.nowPlaying.image640URL),
+                backgroundImage: NetworkImage(cubit.activeTrack.image640URL),
                 radius: 150,
               ),
               Container(
@@ -173,13 +177,13 @@ class _PlaybackScreenState extends State<PlaybackScreen>
                         Container(
                           width: 330,
                           child: defaultText(
-                              text: cubit.nowPlaying.name,
+                              text: cubit.activeTrack.name,
                               myStyle: Theme.of(context).textTheme.headline4,
                               textOverflow: TextOverflow.ellipsis),
                         ),
                         Container(
                           margin: EdgeInsets.only(left: 3),
-                          child: Text(cubit.nowPlaying.artistName,
+                          child: Text(cubit.activeTrack.artistName,
                               style: Theme.of(context).textTheme.bodyText2),
                         ),
                       ],

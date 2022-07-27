@@ -1,21 +1,24 @@
-abstract class SoundCloudMusicManagerStates{}
+abstract class MusicManagerStates{}
 
-class SoundCloudMusicManagerInitialState extends SoundCloudMusicManagerStates{}
-class SoundCloudMusicManagerLoadingState extends SoundCloudMusicManagerStates{}
-class SoundCloudPlayingNowState extends SoundCloudMusicManagerStates{}
-class SoundCloudPausedState extends SoundCloudMusicManagerStates{}
-class SoundCloudGotTrackAndPlaylistsState extends SoundCloudMusicManagerStates{}
-class SoundCloudMoveSliderState extends SoundCloudMusicManagerStates{}
+class SoundCloudMusicManagerInitialState extends MusicManagerStates{}
+class SoundCloudMusicManagerLoadingState extends MusicManagerStates{}
+class SoundCloudPlayingNowState extends MusicManagerStates{}
+class SoundCloudPausedState extends MusicManagerStates{}
+class SoundCloudGotTrackAndPlaylistsState extends MusicManagerStates{}
+class SoundCloudMoveSliderState extends MusicManagerStates{}
 
-class SoundCloudPlaylistsLoadedSuccessState extends SoundCloudMusicManagerStates{}
-class SoundCloudPlaylistsLoadedErrorState extends SoundCloudMusicManagerStates{}
+class SoundCloudPlaylistsLoadedSuccessState extends MusicManagerStates{}
+class SoundCloudPlaylistsLoadedErrorState extends MusicManagerStates{}
 
 
-class SoundCloudAddPlaylistSuccessState extends SoundCloudMusicManagerStates{}
-class SoundCloudAddPlaylistErrorState extends SoundCloudMusicManagerStates{}
+class SoundCloudAddPlaylistSuccessState extends MusicManagerStates{}
+class SoundCloudAddPlaylistErrorState extends MusicManagerStates{}
 
-class SoundCloudUpdatePlaylistSuccessState extends SoundCloudMusicManagerStates{}
-class SoundCloudUpdatePlaylistErrorState extends SoundCloudMusicManagerStates{}
+class SoundCloudUpdatePlaylistSuccessState extends MusicManagerStates{}
+class SoundCloudUpdatePlaylistErrorState extends MusicManagerStates{}
 
-class SoundCloudSearchSuccessState extends SoundCloudMusicManagerStates{}
-class SoundCloudSearchErrorState extends SoundCloudMusicManagerStates{}
+class SoundCloudSearchSuccessState extends MusicManagerStates{}
+class SoundCloudSearchErrorState extends MusicManagerStates{}
+
+class SoundCloudMainScreenLoadedState extends MusicManagerStates{}
+class SoundCloudMainScreenErrorState extends MusicManagerStates{}

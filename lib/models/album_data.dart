@@ -24,5 +24,33 @@ class AlbumData {
     });
   }
 
+
+  Map<String,dynamic> toJson(){
+
+    List<Map<String,dynamic>> tracks = [];
+    trackList.forEach((element) {
+      tracks.add(element.toJson());
+    });
+
+    return {
+      "id" : id,
+      "name" : name,
+      "images" : [
+        {
+          "url" : image640URL
+        },{
+          "url" : image300URL
+        },{
+          "url" : image64URL
+        }
+      ],
+      "label" : label,
+      "release_date" : releaseDate,
+      "tracks" : {
+        "items" : tracks
+      }
+    };
+  }
+
   AlbumData();
 }

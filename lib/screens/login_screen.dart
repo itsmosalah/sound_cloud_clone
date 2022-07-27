@@ -30,6 +30,10 @@ class LoginScreen extends StatelessWidget {
               backgroundColor: defaultColor,
               textColor: Colors.white);
 
+
+
+
+
           navigateAndFinish(
             context,
             HomeScreen(),

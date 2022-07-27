@@ -16,27 +16,14 @@ import '../../models/track_data.dart';
 import '../../shared/network/remote/sound_api.dart';
 import '../login&Register/cubit.dart';
 
-class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
-  SoundCloudMusicManagerCubit() : super(SoundCloudMusicManagerInitialState());
+class MusicManagerCubit extends Cubit<MusicManagerStates> {
+  MusicManagerCubit() : super(SoundCloudMusicManagerInitialState());
 
-  static SoundCloudMusicManagerCubit get(context) => BlocProvider.of(context);
+  static MusicManagerCubit get(context) => BlocProvider.of(context);
 
   List<TrackDataPreview> trackList = [];
 
-  /*void setTrackList() {
-    // Map<String,dynamic> mp =
-    SoundAPI.getSearchResults("ay 7aga").then((value) {
-      trackList = getTrackList(value);
-    });
-  }*/
-
   TrackDataPlayback nowPlaying = TrackDataPlayback();
-
-  //called after setting the track to nowPlaying and ready to play
-  void setNowPlaying()async {
-    await audioPlayer.setUrl(nowPlaying.previewURL);
-    await audioPlayer.play();
-  }
 
   bool playlistsLoaded = false;
 
@@ -48,7 +35,6 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
     //if not loaded already, request it from api
     SoundAPI.getTrackAPI(id).then((value) {
       nowPlaying = value;
-      setNowPlaying();
       emit(SoundCloudGotTrackAndPlaylistsState());
       if (!playlistsLoaded) {
         loadPlayLists();
@@ -60,7 +46,7 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
   }
 
   bool stillPlaying = false;
-  IconData playerButtonIcon = Icons.play_arrow;
+  /*IconData playerButtonIcon = Icons.play_arrow;
   bool isPlaying = false;
 
   String urlSrc = "";
@@ -125,7 +111,7 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
   }
 
   double getCurrentSpeed() => speeds[speedIdx];
-
+*/
 //going to add more fields for handling local music file handling
 
   void createPlaylist(String name) {
@@ -143,6 +129,7 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
   List<Playlist> userPlaylists = [];
 
   void loadPlayLists() {
+
     FirebaseFirestore.instance.collection('users').doc(loggedUserID).get().then(
       (DocumentSnapshot doc) {
         final data = doc.data() as Map<String, dynamic>;
@@ -150,6 +137,7 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
           final json = element as Map<String, dynamic>;
           userPlaylists.add(Playlist.fromJson(json));
         });
+        playlistsLoaded = true;
         emit(SoundCloudPlaylistsLoadedSuccessState());
       },
       onError: (e) {
@@ -186,13 +174,20 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
     });
   }
 
-  AlbumData spaghettiAlbum = AlbumData();
-  void setAlbum() async {
-    spaghettiAlbum = await SoundAPI.getAlbum("some id");
+  AlbumData currentAlbum = AlbumData();
+  void setAlbum(AlbumData x) {
+    currentAlbum = x;
+  }
+
+  AlbumData getAlbum(String id) {
+    AlbumData x = AlbumData();
+    SoundAPI.getAlbumAPI(id).then((value) {
+      x = value;
+    });
+    return x;
   }
 
   SearchResults searchResults = SearchResults();
-
   void setSearchResults(String searchQuery) {
     SoundAPI.getSearchResults(searchQuery).then((value) {
       searchResults = SearchResults.fromJson(value);
@@ -205,4 +200,67 @@ class SoundCloudMusicManagerCubit extends Cubit<SoundCloudMusicManagerStates> {
     );
 
   }
+
+  bool mainScreenContentLoaded = false;
+  List<AlbumData> mainScreenAlbums = [];
+  List<TrackDataPlayback> mainScreenTracks = [];
+  void loadMainScreenContent (){
+
+    if(mainScreenContentLoaded)
+      {
+        return;
+      }
+    mainScreenContentLoaded = true;
+
+
+    FirebaseFirestore.instance.collection('preloaded_albums')
+        .doc('albums').get().then(
+          (DocumentSnapshot doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        data["main_screen_albums"].forEach((element) {
+          final json = element as Map<String, dynamic>;
+          mainScreenAlbums.add(AlbumData.fromJson(json));
+          mainScreenTracks.addAll(mainScreenAlbums.last.trackList);
+        });
+        mainScreenTracks.shuffle();
+        emit(SoundCloudMainScreenLoadedState());
+        //emit(SoundCloudPlaylistsLoadedSuccessState());
+      },
+      onError: (e) {
+        print("Error getting playlists $e");
+        // emit(SoundCloudPlaylistsLoadedErrorState());
+        emit(SoundCloudMainScreenErrorState());
+      },
+    );
+
+    /*var random = Random();
+    int n = mainScreenTracks.length;
+    for (int i = 0; i < n/2; i++){
+      int idx1 = i;
+      int idx2 = n - idx1 - 1;
+
+      var tmp = mainScreenTracks[idx1];
+      mainScreenTracks[idx1] = mainScreenTracks[idx2];
+      mainScreenTracks[idx2] = tmp;
+    }*/
+
+    /*int n = mainScreenTracks.length;
+    print(mainScreenTracks[0].name);
+    print(mainScreenTracks[n-1].name);
+
+    var tmp = mainScreenTracks[0];
+    mainScreenTracks[0] = mainScreenTracks[n-1];
+    mainScreenTracks[n-1] = tmp;
+    print("bos bos el 7arka de");
+
+    print(mainScreenTracks[0].name);
+    print(mainScreenTracks[n-1].name);
+
+    print("el mafroood SHUFFLEDDDD");
+    mainScreenTracks.shuffle();*/
+
+
+  }
+
+
 }
