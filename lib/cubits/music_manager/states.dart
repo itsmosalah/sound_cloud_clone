@@ -28,3 +28,4 @@ class SoundCloudMainScreenErrorState extends MusicManagerStates{}
 
 
 class SoundCloudTogglePlayerBtnIconState extends MusicManagerStates{}
+class SoundCloudGetTrackSuccessState extends MusicManagerStates{}

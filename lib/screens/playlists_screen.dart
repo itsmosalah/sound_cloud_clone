@@ -6,8 +6,11 @@ import 'package:sound_cloud_clone/components/components.dart';
 import 'package:sound_cloud_clone/components/constants.dart';
 import 'package:sound_cloud_clone/cubits/music_manager/cubit.dart';
 import 'package:sound_cloud_clone/cubits/music_manager/states.dart';
+import 'package:sound_cloud_clone/cubits/music_playback/states.dart';
 import 'package:sound_cloud_clone/screens/playback_screen.dart';
 import 'package:sound_cloud_clone/screens/playlist_tracks_screen.dart';
+
+import '../cubits/music_playback/cubit.dart';
 
 class PlayListsScreen extends StatelessWidget {
   const PlayListsScreen({Key? key}) : super(key: key);
@@ -16,11 +19,12 @@ class PlayListsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var nameController = TextEditingController();
 
-    var cubit = MusicManagerCubit.get(context);
+    var manager = MusicManagerCubit.get(context);
+    var cubit = MusicPlaybackCubit.get(context);
 
     //USER PLAYLISTS LOADED
-    if (!cubit.playlistsLoaded){
-      cubit.loadPlayLists();
+    if (!manager.playlistsLoaded){
+      manager.loadPlayLists();
     }
 
     return BlocConsumer<MusicManagerCubit,
@@ -88,7 +92,7 @@ class PlayListsScreen extends StatelessWidget {
                                     ),
                                     child: TextButton(
                                         onPressed: () {
-                                          cubit.createPlaylist(
+                                          manager.createPlaylist(
                                               nameController.text);
                                         },
                                         child: defaultText(
@@ -103,44 +107,54 @@ class PlayListsScreen extends StatelessWidget {
               },
             ),
           ]),
-          body: ConditionalBuilder(
-            condition: cubit.playlistsLoaded,
-            builder: (context) => ListView.separated(
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    navigateTo(context, PlayListTracksScreen(index));
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            defaultText(
-                                text:
-                                    cubit.userPlaylists[index].name.toString(),
-                                myStyle: Theme.of(context).textTheme.subtitle2),
-                            defaultText(
-                                text:
-                                    "Number of tracks ${cubit.userPlaylists[index].size}",
-                                myStyle: Theme.of(context).textTheme.bodyText2),
-                          ],
-                        ),
-                        Spacer(),
-                        Icon(Icons.arrow_forward_ios),
-                      ],
+          body: BlocConsumer<MusicPlaybackCubit,MusicPlaybackStates>(
+            builder: (context, state) {
+              return myPanel(
+                  Screen: ConditionalBuilder(
+                    condition: manager.playlistsLoaded,
+                    builder: (context) => ListView.separated(
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            navigateTo(context, PlayListTracksScreen(index));
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Row(
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    defaultText(
+                                        text:
+                                        manager.userPlaylists[index].name.toString(),
+                                        myStyle: Theme.of(context).textTheme.subtitle2),
+                                    defaultText(
+                                        text:
+                                        "Number of tracks ${manager.userPlaylists[index].size}",
+                                        myStyle: Theme.of(context).textTheme.bodyText2),
+                                  ],
+                                ),
+                                Spacer(),
+                                Icon(Icons.arrow_forward_ios),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) => myDivider(),
+                      itemCount: manager.userPlaylists.length,
+                    ),
+                    fallback: (context) => Center(
+                      child: CircularProgressIndicator(),
                     ),
                   ),
-                );
-              },
-              separatorBuilder: (context, index) => myDivider(),
-              itemCount: cubit.userPlaylists.length,
-            ),
-            fallback: (context) => Center(
-              child: CircularProgressIndicator(),
-            ),
+                  context: context,
+                  cubit: cubit);
+            },
+            listener: (context, state) {
+
+            },
           ),
         );
       },

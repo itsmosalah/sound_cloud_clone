@@ -37,19 +37,5 @@ class Playlist {
     trackList.removeAt(index);
     size--;
   }
-  /*
-  planned json looks like so:
 
-  {
-    "name" : "myplaylist",
-    "no_of_tracks" : 2,
-    "tracks" : [
-
-      tracks arranged the same way as in the API
-
-    ]
-  }
-
-
-   */
 }

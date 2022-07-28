@@ -28,94 +28,19 @@ class MusicManagerCubit extends Cubit<MusicManagerStates> {
 
   bool playlistsLoaded = false;
 
-  TrackDataPlayback getTrack(String id) {
-    //this should take the track id string
-    //and then it should check the set of loaded tracks
-
+  Future<void> getTrack(String id) async {
     emit(SoundCloudMusicManagerLoadingState());
-    //if not loaded already, request it from api
-    SoundAPI.getTrackAPI(id).then((value) {
+    /*SoundAPI.getTrackAPI(id).then((value) {
       nowPlaying = value;
-      emit(SoundCloudGotTrackAndPlaylistsState());
-    });
-
-    return nowPlaying;
+      gotTheTrack = true;
+      print("ID VAL = " + value.id);
+      emit(SoundCloudGetTrackSuccessState());
+    });*/
+    nowPlaying = await SoundAPI.getTrackAPI(id);
+    emit(SoundCloudGetTrackSuccessState());
   }
 
 
-  // bool playBtnClicked = false;
-  // bool stillPlaying = false;
-  // void panelAppear()
-  // {
-  //   playBtnClicked=true;
-  //   emit(SoundCloudBoolState());
-  // }
-  /*IconData playerButtonIcon = Icons.play_arrow;
-  bool isPlaying = false;
-
-  String urlSrc = "";
-  AudioPlayer audioPlayer = AudioPlayer();
-  int duration = 0;
-
-  void slideTo(double newPosition) {
-    audioPlayer.seek(Duration(seconds: newPosition.toInt()));
-    emit(SoundCloudMoveSliderState());
-  }
-
-  int getPosition() {
-    int value = audioPlayer.position.inSeconds;
-    return value;
-  }
-
-  void togglePlayer() {
-    if (!isPlaying) {
-      audioPlayer.play();
-      playerButtonIcon = Icons.pause;
-      emit(SoundCloudPlayingNowState());
-    } else {
-      audioPlayer.pause();
-      playerButtonIcon = Icons.play_arrow;
-      emit(SoundCloudPausedState());
-    }
-    isPlaying = !isPlaying;
-  }
-
-  Future<void> setUrlSrc(String s) async {
-    urlSrc = s;
-    await audioPlayer.setUrl(urlSrc);
-    duration = audioPlayer.duration!.inSeconds;
-  }
-
-  void fastForward(int value) {
-    int pos = getPosition();
-    if (pos + value >= duration) {
-      if (isPlaying) togglePlayer();
-      slideTo(0);
-    } else {
-      slideTo((pos + value).toDouble());
-    }
-  }
-
-  void rewind(int value) {
-    int pos = getPosition();
-    if (pos - value <= 0) {
-      slideTo(0);
-    } else {
-      slideTo((pos - value).toDouble());
-    }
-  }
-
-  int speedIdx = 0;
-  List<double> speeds = [1, 1.25, 1.5, 1.75, 2];
-
-  void cycleSpeed() {
-    speedIdx++;
-    if (speedIdx == speeds.length) speedIdx = 0; //faster than modulo
-    audioPlayer.setSpeed(speeds[speedIdx]);
-  }
-
-  double getCurrentSpeed() => speeds[speedIdx];
-*/
 //going to add more fields for handling local music file handling
 
   void createPlaylist(String name) {
@@ -183,6 +108,8 @@ class MusicManagerCubit extends Cubit<MusicManagerStates> {
     currentAlbum = x;
   }
 
+
+  //get albums by search. which still has not been developed in UI of this version
   AlbumData getAlbum(String id) {
     AlbumData x = AlbumData();
     SoundAPI.getAlbumAPI(id).then((value) {

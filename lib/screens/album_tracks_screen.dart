@@ -10,6 +10,7 @@ import 'package:sound_cloud_clone/screens/playback_screen.dart';
 import 'package:we_slide/we_slide.dart';
 
 import '../components/constants.dart';
+import '../cubits/music_playback/states.dart';
 import '../cubits/theme_manager/cubit.dart';
 
 class AlbumTracksScreen extends StatelessWidget {
@@ -20,83 +21,94 @@ class AlbumTracksScreen extends StatelessWidget {
     return BlocConsumer<MusicManagerCubit,MusicManagerStates>(
       listener: (BuildContext context, Object? state) {},
       builder: (BuildContext context, state){
-        var cubit = MusicManagerCubit.get(context);
-
+        var manager = MusicManagerCubit.get(context);
         return Scaffold(
           appBar: myAppBar(
               context,
-              title: cubit.currentAlbum.name,
+              title: manager.currentAlbum.name,
           ),
-          body:ListView.separated(
-              itemBuilder: (context, index){
-                return InkWell(
-                  onTap:  ()  {
-                    cubit.nowPlaying = cubit.currentAlbum.trackList[index];
-                    cubit.trackList = cubit.currentAlbum.trackList;
-                    cubit.playlistIndex = index;
-                    navigateTo(context, PlaybackScreen());
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(18.0),
-                    child: Row(
-                      children: [
-                        Image(
-                          image: NetworkImage(cubit.currentAlbum.trackList[index].image64URL,),
-                          width: 100,
-                        ),
-                        SizedBox(width: 15),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: 190,
-                              child: defaultText(
-                                text: cubit.currentAlbum.trackList[index].name,
-                                myStyle: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .subtitle2,
-                                textOverflow: TextOverflow.ellipsis,
-                              ),
+          body: BlocConsumer<MusicPlaybackCubit, MusicPlaybackStates> (
+            listener: (context, state){},
+            builder: (context, state) {
+              var cubit = MusicPlaybackCubit.get(context);
+              return myPanel(
+                  context: context,
+                  cubit: cubit,
+                  Screen: ListView.separated(
+                      itemBuilder: (context, index){
+                        return InkWell(
+                          onTap:  ()  {
+                            cubit.stillPlaying = false;
+                            manager.nowPlaying = manager.currentAlbum.trackList[index];
+                            manager.trackList = manager.currentAlbum.trackList;
+                            cubit.playlistIndex = index;
+                            navigateTo(context, PlaybackScreen());
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(18.0),
+                            child: Row(
+                              children: [
+                                Image(
+                                  image: NetworkImage(manager.currentAlbum.trackList[index].image64URL,),
+                                  width: 100,
+                                ),
+                                SizedBox(width: 15),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 190,
+                                      child: defaultText(
+                                        text: manager.currentAlbum.trackList[index].name,
+                                        myStyle: Theme
+                                            .of(context)
+                                            .textTheme
+                                            .subtitle2,
+                                        textOverflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 190,
+                                      child: defaultText(
+                                          text: manager.currentAlbum.trackList[index].albumName,
+                                          myStyle: Theme
+                                              .of(context)
+                                              .textTheme
+                                              .bodyText2,
+                                          textOverflow: TextOverflow.ellipsis
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Spacer(),
+                                CircleAvatar(
+                                  backgroundColor: defaultColor,
+                                  child: IconButton(
+                                    onPressed:  ()  {
+                                      cubit.stillPlaying = false;
+                                      manager.nowPlaying = manager.currentAlbum.trackList[index];
+                                      manager.trackList = manager.currentAlbum.trackList;
+                                      cubit.playlistIndex = index;
+                                      navigateTo(context, PlaybackScreen());
+                                    },
+                                    icon: Icon(Icons.play_arrow),
+                                    color: ThemeManagerCubit
+                                        .get(context)
+                                        .isDark
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                                ),
+                              ],
                             ),
-                            Container(
-                              width: 190,
-                              child: defaultText(
-                                  text: cubit.currentAlbum.trackList[index].albumName,
-                                  myStyle: Theme
-                                      .of(context)
-                                      .textTheme
-                                      .bodyText2,
-                                  textOverflow: TextOverflow.ellipsis
-                              ),
-                            ),
-                          ],
-                        ),
-                        Spacer(),
-                        CircleAvatar(
-                          backgroundColor: defaultColor,
-                          child: IconButton(
-                            onPressed:  ()  {
-                              cubit.nowPlaying = cubit.currentAlbum.trackList[index];
-                              cubit.trackList = cubit.currentAlbum.trackList;
-                              cubit.playlistIndex = index;
-                              navigateTo(context, PlaybackScreen());
-                            },
-                            icon: Icon(Icons.play_arrow),
-                            color: ThemeManagerCubit
-                                .get(context)
-                                .isDark
-                                ? Colors.white
-                                : Colors.black,
                           ),
-                        ),
-                      ],
-                    ),
+                        );
+                      },
+                      separatorBuilder: (context, index) => myDivider(),
+                      itemCount: manager.currentAlbum.trackList.length
                   ),
-                );
-              },
-              separatorBuilder: (context, index) => myDivider(),
-              itemCount: cubit.currentAlbum.trackList.length
+                  );
+            },
           ),
         );
       },

@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:sound_cloud_clone/components/constants.dart';
 import 'package:sound_cloud_clone/cubits/theme_manager/cubit.dart';
 import 'package:sound_cloud_clone/screens/settings_screen.dart';
+import 'package:we_slide/we_slide.dart';
 
 import '../models/track_data.dart';
 import '../screens/login_screen.dart';
+import '../screens/playback_screen.dart';
 
 void navigateTo(context, nextPage) => Navigator.push(
       context,
@@ -295,3 +299,94 @@ Future myDialog(
                       ],
                     ));
         });
+
+
+Widget myPanel({required Widget Screen, required BuildContext context, required cubit}){
+  return WeSlide(
+    panel: cubit.activeTrackSet ? InkWell(
+      onTap: () {
+        // cubit.stillPlaying = true;
+        cubit.navigatePanel();
+        Navigator.push(context, PageTransition(
+            child: PlaybackScreen(),
+            type: PageTransitionType.bottomToTop));
+      },
+      child: Container(
+          padding: EdgeInsets.fromLTRB(20, 6, 20, 10),
+          color: ThemeManagerCubit
+              .get(context)
+              .isDark
+              ? Colors.grey[900]
+              : Colors.white,
+          child: Row(
+            children: [
+              Image(
+                image: NetworkImage(cubit.activeTrack.image64URL),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 200,
+                    child: defaultText(
+
+                        text: cubit.activeTrack.name,
+                        myStyle: Theme
+                            .of(context)
+                            .textTheme
+                            .subtitle2,
+                        textOverflow: TextOverflow.ellipsis
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Container(
+                    width: 150,
+                    child: defaultText(
+                        text: cubit.activeTrack.artistName,
+                        myStyle: Theme
+                            .of(context)
+                            .textTheme
+                            .bodyText2,
+                        textOverflow: TextOverflow.ellipsis
+                    ),
+                  ),
+                ],
+              ),
+              Spacer(),
+              CircleAvatar(
+                backgroundColor: defaultColor,
+                child: IconButton(
+                  onPressed: () {
+                    //cubit.setUrlSrc(cubit.nowPlaying.previewURL);
+                    cubit.togglePlayer();
+                  },
+                  icon: Icon(cubit.playerButtonIcon),
+                  color: ThemeManagerCubit
+                      .get(context)
+                      .isDark
+                      ? Colors.white
+                      : Colors.black,
+                ),
+              )
+            ],
+          )
+      ),
+    ) : Container(),
+    panelMinSize: 85,
+    panelMaxSize: 86,
+    body: Container(
+      color: ThemeManagerCubit
+          .get(context)
+          .isDark
+          ? HexColor('333739')
+          : HexColor('e8e6ef'),
+
+      child: Screen,
+    ),
+  );
+}

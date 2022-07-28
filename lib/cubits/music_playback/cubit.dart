@@ -57,11 +57,16 @@ class MusicPlaybackCubit extends Cubit<MusicPlaybackStates> {
 
 
 
-
+  //testing
+  void navigatePanel(){
+    stillPlaying = !stillPlaying;
+    emit(MusicPlaybackStillPlayingState());
+  }
 
   TrackDataPlayback activeTrack = TrackDataPlayback();
-
+  bool activeTrackSet = false;
   void setActiveTrack(TrackDataPlayback track){
+    activeTrackSet = true;
     activeTrack = track;
     if (isPlaying){
       togglePlayer();

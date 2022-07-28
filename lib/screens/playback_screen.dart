@@ -27,8 +27,13 @@ class _PlaybackScreenState extends State<PlaybackScreen>
     var cubit = MusicPlaybackCubit.get(context);
     var manager = MusicManagerCubit.get(context);
 
-    cubit.setActiveTrack(manager.nowPlaying);
-    cubit.setActivePlaylist(manager.trackList, manager.playlistIndex);
+
+
+    if(!cubit.stillPlaying) {
+      cubit.setActiveTrack(manager.nowPlaying);
+      cubit.setActivePlaylist(manager.trackList, manager.playlistIndex);
+    }
+
 
 
 

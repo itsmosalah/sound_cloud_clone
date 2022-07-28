@@ -17,3 +17,5 @@ class MusicPlaybackUpdatePlaylistErrorState extends MusicPlaybackStates {}
 class MusicPlaybackAddPlaylistErrorState extends MusicPlaybackStates {}
 
 class MusicPlaybackPlaylistNavigationState extends MusicPlaybackStates {}
+
+class MusicPlaybackStillPlayingState extends MusicPlaybackStates {}

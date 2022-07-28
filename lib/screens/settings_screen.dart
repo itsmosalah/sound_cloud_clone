@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sound_cloud_clone/components/components.dart';
 import 'package:sound_cloud_clone/cubits/theme_manager/cubit.dart';
 import 'package:sound_cloud_clone/cubits/theme_manager/states.dart';
-import 'package:sound_cloud_clone/screens/playlists_screen.dart';
 import 'package:sound_cloud_clone/screens/profile_screen.dart';
 
 import 'login_screen.dart';

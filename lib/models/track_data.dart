@@ -4,7 +4,6 @@ abstract class TrackData {
   //url to images with different resolutions
   String image640URL = "", image300URL = "", image64URL = "", albumName = "";
 
-  // TrackData({required this.id,required this.name,required this.previewURL});
 }
 
 class TrackDataPreview extends TrackData {
@@ -64,11 +63,6 @@ class TrackDataPlayback extends TrackData {
 
 }
 
-/*
-  got a json,
-  make a list of trackpreview
- */
-
 
 List<TrackDataPreview> getTrackList (Map<String,dynamic>json){
   var jsonList = json["tracks"]["items"];
@@ -84,15 +78,3 @@ List<TrackDataPreview> getTrackList (Map<String,dynamic>json){
   return trackList;
 }
 
-/*
-class TrackList {
-  List? trackList;
-  TrackList.fromJson(Map<String,dynamic>json){
-    List<Map<String, dynamic>> jsonList = json["tracks"]["items"];
-    for (var element in jsonList) {
-      trackList?.add(
-          TrackDataPreview.fromJson(element["data"])
-      );
-    }
-  }
-}*/
