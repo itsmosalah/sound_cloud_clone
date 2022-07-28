@@ -55,7 +55,7 @@ ThemeData DarkMode = ThemeData(
       color: Colors.white,
     ),
     headline4: TextStyle(
-        fontSize: 40.0, color: Colors.white, letterSpacing: 2.5, height: 1),
+        fontSize: 37.0, color: Colors.white, letterSpacing: 2.5, height: 1),
     // For Normal Text
     bodyText1: TextStyle(
       fontSize: 25,
@@ -112,7 +112,7 @@ ThemeData LightMode = ThemeData(
       color: Colors.grey[600],
     ),
     headline4:
-        TextStyle(fontSize: 40.0, color: Colors.black,letterSpacing: 2.5, height: 1),
+        TextStyle(fontSize: 37.0, color: Colors.black,letterSpacing: 2.5, height: 1),
     // Normal Text
     subtitle1: const TextStyle(
         fontSize: 15,

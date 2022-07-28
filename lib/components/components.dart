@@ -9,7 +9,9 @@ import '../screens/login_screen.dart';
 
 void navigateTo(context, nextPage) => Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => nextPage,),
+      MaterialPageRoute(
+        builder: (context) => nextPage,
+      ),
     );
 
 void navigateAndFinish(context, nextPage) => Navigator.pushAndRemoveUntil(
@@ -41,20 +43,24 @@ Widget defaultTextField({
       filled: true,
       hintText: labeltxt,
       border: enableBorder ? null : InputBorder.none,
-      enabledBorder: enableBorder ? OutlineInputBorder(
-        borderRadius: BorderRadius.circular(20),
-        borderSide: BorderSide(color: Colors.black, width: 1),
-      ) : OutlineInputBorder(
-        borderRadius: BorderRadius.circular(20),
-        borderSide: BorderSide(color: Colors.white, width: 10),
-      ),
-      focusedBorder: enableBorder ? OutlineInputBorder(
-        borderRadius: BorderRadius.circular(20),
-        borderSide: BorderSide(color: Colors.black, width: 1),
-      ) : OutlineInputBorder(
-        borderRadius: BorderRadius.circular(20),
-        borderSide: BorderSide(color: Colors.white, width: 10),
-      ),
+      enabledBorder: enableBorder
+          ? OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(color: Colors.black, width: 1),
+            )
+          : OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(color: Colors.white, width: 10),
+            ),
+      focusedBorder: enableBorder
+          ? OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(color: Colors.black, width: 1),
+            )
+          : OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(color: Colors.white, width: 10),
+            ),
       prefixIcon: prefixIcon,
       suffixIcon: IconButton(
         icon: Icon(suffix),
@@ -79,20 +85,19 @@ Widget defaultText(
         FontStyle? fontStyle,
         TextStyle? hintStyle,
         TextAlign? textAlign,
-        TextStyle? myStyle
-        }) =>
+        TextStyle? myStyle}) =>
     Text(
       isUpperCase ? text.toUpperCase() : text,
       maxLines: linesMax,
       overflow: textOverflow,
       textAlign: textAlign,
-      style: myStyle ?? TextStyle(
-          fontSize: fontSize,
-          color: textColor,
-          height: textHeight,
-          fontStyle: fontStyle,
-          letterSpacing: letterSpacing
-      ),
+      style: myStyle ??
+          TextStyle(
+              fontSize: fontSize,
+              color: textColor,
+              height: textHeight,
+              fontStyle: fontStyle,
+              letterSpacing: letterSpacing),
     );
 
 Widget defaultTextButton(
@@ -232,17 +237,61 @@ Widget buildSettingsItem(SettingsModel model, context) => Container(
       ),
     ));
 
-AppBar myAppBar(BuildContext context, {required String title, List<Widget>?myActions}){
+AppBar myAppBar(BuildContext context,
+    {required String title, List<Widget>? myActions}) {
   return AppBar(
     title: Text(
       title,
-      style: Theme
-          .of(context)
-          .textTheme
-          .headline1,
+      style: Theme.of(context).textTheme.headline1,
     ),
     centerTitle: true,
     backgroundColor: defaultColor,
     actions: myActions ?? [],
   );
 }
+
+Future myDialog(
+        {context,
+        required text, declineText, acceptText,
+        Widget? content,
+        bool isItListView = false,
+        void Function()? declineFn,
+        void Function()? acceptFn}) =>
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+              title: Text(
+                text,
+                style: TextStyle(fontSize: 17),
+              ),
+              content: isItListView
+                  ? content
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          child: TextButton(
+                              onPressed: declineFn,
+                              child: defaultText(
+                                  text: declineText, textColor: Colors.white)),
+                          width: 80,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: defaultColor,
+                          ),
+                        ),
+                        Container(
+                          width: 80,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: defaultColor,
+                          ),
+                          child: TextButton(
+                              onPressed: acceptFn,
+                              child: defaultText(
+                                  text: acceptText, textColor: Colors.white)),
+                        ),
+                      ],
+                    ));
+        });

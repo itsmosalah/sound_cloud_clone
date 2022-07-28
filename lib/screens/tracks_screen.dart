@@ -1,5 +1,3 @@
-
-
 import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,75 +23,72 @@ class TracksScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<MusicManagerCubit,
-        MusicManagerStates>(
+    return BlocConsumer<MusicManagerCubit, MusicManagerStates>(
       builder: (BuildContext context, state) {
         var cubit = MusicManagerCubit.get(context);
         //ScrollController _controller = ScrollController();
         //cubit.setAlbum();
         //List<TrackDataPlayback> dummyTrackList = cubit.spaghettiAlbum.trackList;
-
         cubit.loadMainScreenContent();
 
         return ConditionalBuilder(
           condition: cubit.mainScreenContentLoaded,
           builder: (context) => Scaffold(
-              appBar: myAppBar(
-                  context,
-                  title: 'SoundCloud',
-                  myActions: [
-                    IconButton(onPressed: (){
-                      navigateTo(context, const SearchScreen());
-                    }, icon: const Icon(Icons.search))
-                  ]
-              ),
-
-              body: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      defaultText(
-                          text: 'Albums:',
-                          myStyle: Theme.of(context).textTheme.headline3
-                      ),
-                      SizedBox(height: 10),
-                      Container(
-                        height: 190,
-                        child: ListView.separated(
-                          physics: BouncingScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index){
-                            return buildAlbum(cubit.mainScreenAlbums[index], cubit, context);
-                          },
-                          itemCount: cubit.mainScreenAlbums.length,
-                          separatorBuilder: (context, index) {
-                            return SizedBox(width: 20,);
-                          },
-                        ),
-
-                      ),
-                      myDivider(),
-                      const SizedBox(height: 20,),
-                      defaultText(
-                          text: 'Tracks:',
-                          myStyle: Theme.of(context).textTheme.headline3
-                      ),
-
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index){
-                          return buildTrack(cubit.mainScreenTracks[index], context, cubit);
+            appBar: myAppBar(context, title: 'SoundCloud', myActions: [
+              IconButton(
+                  onPressed: () {
+                    navigateTo(context, const SearchScreen());
+                  },
+                  icon: const Icon(Icons.search))
+            ]),
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    defaultText(
+                        text: 'Albums:',
+                        myStyle: Theme.of(context).textTheme.headline3),
+                    SizedBox(height: 10),
+                    Container(
+                      height: 190,
+                      child: ListView.separated(
+                        physics: BouncingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return buildAlbum(
+                              cubit.mainScreenAlbums[index], cubit, context);
                         },
-                        itemCount: cubit.mainScreenTracks.length,
+                        itemCount: cubit.mainScreenAlbums.length,
+                        separatorBuilder: (context, index) {
+                          return SizedBox(
+                            width: 20,
+                          );
+                        },
                       ),
-                    ],
-                  ),
+                    ),
+                    myDivider(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    defaultText(
+                        text: 'Tracks:',
+                        myStyle: Theme.of(context).textTheme.headline3),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (context, index) {
+                        return buildTrack(
+                            cubit.mainScreenTracks[index], context, cubit);
+                      },
+                      itemCount: cubit.mainScreenTracks.length,
+                    ),
+                  ],
                 ),
-              )
+              ),
+            ),
           ),
           fallback: (context) => const Center(
             child: CircularProgressIndicator(),
@@ -103,9 +98,10 @@ class TracksScreen extends StatelessWidget {
       listener: (BuildContext context, Object? state) {},
     );
   }
-  Widget buildAlbum(albumData, cubit, context){
+
+  Widget buildAlbum(albumData, cubit, context) {
     return InkWell(
-      onTap: (){
+      onTap: () {
         cubit.setAlbum(albumData);
         navigateTo(context, const AlbumTracksScreen());
       },
@@ -117,9 +113,11 @@ class TracksScreen extends StatelessWidget {
             height: 100,
             width: 100,
           ),
-          defaultText(
-              text: albumData.name,
-              myStyle: Theme.of(context).textTheme.subtitle2
+          Container(
+            width: 110,
+            child: defaultText(
+                text: albumData.name,
+                myStyle: Theme.of(context).textTheme.subtitle2,textOverflow: TextOverflow.ellipsis),
           ),
           defaultText(
             text: albumData.releaseDate,
@@ -128,9 +126,10 @@ class TracksScreen extends StatelessWidget {
       ),
     );
   }
-  Widget buildTrack(TrackDataPlayback track, context, cubit){
+
+  Widget buildTrack(TrackDataPlayback track, context, cubit) {
     return InkWell(
-      onTap: (){
+      onTap: () {
         cubit.nowPlaying = track;
         navigateTo(context, const PlaybackScreen());
       },
@@ -147,7 +146,7 @@ class TracksScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                width: 100,
+                width: 210,
                 child: defaultText(
                   text: track.name,
                   myStyle: Theme.of(context).textTheme.subtitle2,
@@ -158,25 +157,21 @@ class TracksScreen extends StatelessWidget {
           ),
           const Spacer(),
           CircleAvatar(
-          backgroundColor: defaultColor,
-          child: IconButton(
-            onPressed:  ()  {
-              cubit.nowPlaying = track;
-              navigateTo(context, const PlaybackScreen());
-            },
-            icon: const Icon(Icons.play_arrow),
-            color: ThemeManagerCubit
-                .get(context)
-                .isDark
-                ? Colors.white
-                : Colors.black,
+            backgroundColor: defaultColor,
+            child: IconButton(
+              onPressed: () {
+                cubit.nowPlaying = track;
+                navigateTo(context, const PlaybackScreen());
+              },
+              icon: const Icon(Icons.play_arrow),
+              color: ThemeManagerCubit.get(context).isDark
+                  ? Colors.white
+                  : Colors.black,
+            ),
           ),
-        ),
+          SizedBox(width: 5,),
         ],
       ),
     );
   }
-
 }
-
-

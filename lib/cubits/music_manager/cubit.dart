@@ -36,16 +36,19 @@ class MusicManagerCubit extends Cubit<MusicManagerStates> {
     SoundAPI.getTrackAPI(id).then((value) {
       nowPlaying = value;
       emit(SoundCloudGotTrackAndPlaylistsState());
-      if (!playlistsLoaded) {
-        loadPlayLists();
-        playlistsLoaded = true;
-      }
     });
 
     return nowPlaying;
   }
 
-  bool stillPlaying = false;
+
+  // bool playBtnClicked = false;
+  // bool stillPlaying = false;
+  // void panelAppear()
+  // {
+  //   playBtnClicked=true;
+  //   emit(SoundCloudBoolState());
+  // }
   /*IconData playerButtonIcon = Icons.play_arrow;
   bool isPlaying = false;
 
