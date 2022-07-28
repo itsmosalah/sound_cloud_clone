@@ -57,7 +57,7 @@ class AlbumTracksScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Container(
-                                      width: 190,
+                                      width: 160,
                                       child: defaultText(
                                         text: manager.currentAlbum.trackList[index].name,
                                         myStyle: Theme
@@ -68,7 +68,7 @@ class AlbumTracksScreen extends StatelessWidget {
                                       ),
                                     ),
                                     Container(
-                                      width: 190,
+                                      width: 160,
                                       child: defaultText(
                                           text: manager.currentAlbum.trackList[index].albumName,
                                           myStyle: Theme

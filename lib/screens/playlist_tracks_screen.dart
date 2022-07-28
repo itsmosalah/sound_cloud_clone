@@ -73,7 +73,7 @@ class PlayListTracksScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
-                                    width: 190,
+                                    width: 170,
                                     child: defaultText(
                                       text: currentPlaylist.trackList[index].name,
                                       myStyle: Theme.of(context).textTheme.subtitle2,
@@ -81,7 +81,7 @@ class PlayListTracksScreen extends StatelessWidget {
                                     ),
                                   ),
                                   Container(
-                                    width: 190,
+                                    width: 100,
                                     child: defaultText(
                                         text:
                                         currentPlaylist.trackList[index].albumName,
@@ -106,7 +106,8 @@ class PlayListTracksScreen extends StatelessWidget {
                                               msg:
                                               'Song deleted',
                                               backgroundColor: defaultColor,
-                                              textColor: Colors.white);
+                                              textColor: Colors.white
+                                          );
                                           currentPlaylist.removeTrack(index);
 
                                           Navigator.pop(context);

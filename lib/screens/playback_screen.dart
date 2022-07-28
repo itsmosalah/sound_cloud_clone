@@ -115,9 +115,13 @@ class _PlaybackScreenState extends State<PlaybackScreen>
                                         defaultText(
                                             text: manager
                                                 .userPlaylists[index].name,
-                                            myStyle: Theme.of(context)
-                                                .textTheme
-                                                .subtitle2),
+                                            myStyle: TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.black,
+                                                letterSpacing: 1.3,
+                                                overflow: TextOverflow.ellipsis
+                                            )
+                                        ),
                                         defaultText(
                                             text: "Number of tracks = " +
                                                 '${manager.userPlaylists[index].size}',
@@ -180,7 +184,7 @@ class _PlaybackScreenState extends State<PlaybackScreen>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          width: 330,
+                          width: 300,
                           child: defaultText(
                               text: cubit.activeTrack.name,
                               myStyle: Theme.of(context).textTheme.headline4,

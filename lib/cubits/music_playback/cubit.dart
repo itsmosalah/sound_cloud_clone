@@ -53,6 +53,8 @@ class MusicPlaybackCubit extends Cubit<MusicPlaybackStates> {
     }
     setActiveTrack(activePlaylist[playlistIndex]);
     emit(MusicPlaybackPlaylistNavigationState());
+
+    togglePlayer();
   }
 
 

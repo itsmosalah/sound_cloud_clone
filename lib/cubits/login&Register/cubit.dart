@@ -91,6 +91,7 @@ class SoundCloudLoginAndRegCubit extends Cubit<SoundCloudLoginAndRegStates> {
       'email': email,
       'password': password,
       'uId': uId,
+      'playlists' : []
     }).then((value) {
       emit(SoundCloudCreateUserSuccessState());
     }).catchError((error) {

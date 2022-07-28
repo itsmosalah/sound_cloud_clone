@@ -74,7 +74,8 @@ class TracksScreen extends StatelessWidget {
                             ),
                             defaultText(
                                 text: 'Tracks:',
-                                myStyle: Theme.of(context).textTheme.headline3),
+                                myStyle: Theme.of(context).textTheme.headline3
+                            ),
                             ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
@@ -143,7 +144,7 @@ class TracksScreen extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: 100,
+            width: 80,
             padding: const EdgeInsets.all(10),
             child: Image(
               image: NetworkImage(track.image64URL),
