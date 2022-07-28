@@ -15,3 +15,5 @@ class MusicPlaybackPlaylistsLoadedSuccessState extends MusicPlaybackStates {}
 class MusicPlaybackUpdatePlaylistSuccessState extends MusicPlaybackStates {}
 class MusicPlaybackUpdatePlaylistErrorState extends MusicPlaybackStates {}
 class MusicPlaybackAddPlaylistErrorState extends MusicPlaybackStates {}
+
+class MusicPlaybackPlaylistNavigationState extends MusicPlaybackStates {}

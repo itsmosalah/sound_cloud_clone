@@ -123,6 +123,8 @@ class PlayListTracksScreen extends StatelessWidget {
                         child: IconButton(
                           onPressed: () {
                             cubit.nowPlaying = currentPlaylist.trackList[index];
+                            cubit.trackList = currentPlaylist.trackList;
+                            cubit.playlistIndex = index;
                             navigateTo(context, PlaybackScreen());
                           },
                           icon: Icon(Icons.play_arrow),

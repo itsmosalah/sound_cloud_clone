@@ -28,6 +28,7 @@ class _PlaybackScreenState extends State<PlaybackScreen>
     var manager = MusicManagerCubit.get(context);
 
     cubit.setActiveTrack(manager.nowPlaying);
+    cubit.setActivePlaylist(manager.trackList, manager.playlistIndex);
 
 
 
@@ -136,7 +137,7 @@ class _PlaybackScreenState extends State<PlaybackScreen>
                   Icons.add,
                   size: 30,
                 ),
-              )
+              ),
             ],
           ),
           body: cubit.isPlaying
@@ -211,6 +212,7 @@ class _PlaybackScreenState extends State<PlaybackScreen>
                       onTap: () {
                         cubit.cycleSpeed();
                       },
+
                       child: Text(
                         "x${cubit.getCurrentSpeed()}",
                         style: const TextStyle(
@@ -229,6 +231,9 @@ class _PlaybackScreenState extends State<PlaybackScreen>
                     customBorder: const CircleBorder(),
                     onTap: () {
                       cubit.rewind(5);
+                    },
+                    onLongPress: (){
+                      cubit.previousTrack();
                     },
                     child: Stack(
                       children: const [
@@ -276,6 +281,9 @@ class _PlaybackScreenState extends State<PlaybackScreen>
                       //forwards
                       cubit.fastForward(5);
                     },
+                    onLongPress: (){
+                      cubit.nextTrack();
+                    },
                     customBorder: const CircleBorder(),
                     child: Stack(
                       children: const [
@@ -307,3 +315,4 @@ class _PlaybackScreenState extends State<PlaybackScreen>
     );
   }
 }
+

@@ -16,6 +16,49 @@ class MusicPlaybackCubit extends Cubit<MusicPlaybackStates> {
   static MusicPlaybackCubit get(context) => BlocProvider.of(context);
 
 
+  ///PLAYLIST MODE - TESTING
+
+  //set active playlist
+  //set index of current track in active
+  List<TrackDataPlayback> activePlaylist = [];
+  int playlistIndex = 0;
+
+  void setActivePlaylist (List <TrackDataPlayback> lst, int curIndex){
+    activePlaylist = lst;
+    playlistIndex = curIndex;
+  }
+
+  //next track
+  void nextTrack(){
+    if (playlistIndex == activePlaylist.length - 1){
+      playlistIndex = 0;
+    }
+    else {
+      playlistIndex++;
+    }
+
+    setActiveTrack(activePlaylist[playlistIndex]);
+    emit(MusicPlaybackPlaylistNavigationState());
+
+    togglePlayer();
+  }
+
+  //previous track
+  void previousTrack(){
+    if (playlistIndex == 0){
+      playlistIndex = activePlaylist.length - 1;
+    }
+    else {
+      playlistIndex--;
+    }
+    setActiveTrack(activePlaylist[playlistIndex]);
+    emit(MusicPlaybackPlaylistNavigationState());
+  }
+
+
+
+
+
   TrackDataPlayback activeTrack = TrackDataPlayback();
 
   void setActiveTrack(TrackDataPlayback track){
@@ -43,6 +86,13 @@ class MusicPlaybackCubit extends Cubit<MusicPlaybackStates> {
   int getPosition() {
     int value = audioPlayer.position.inSeconds;
     emit(MusicPlaybackGetPositionState());
+
+    if (value == audioPlayer.duration?.inSeconds){
+      if (activePlaylist.isNotEmpty){
+        nextTrack();
+      }
+    }
+
     return value;
   }
 

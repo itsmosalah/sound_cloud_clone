@@ -81,7 +81,7 @@ class TracksScreen extends StatelessWidget {
                       scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
                         return buildTrack(
-                            cubit.mainScreenTracks[index], context, cubit);
+                            cubit.mainScreenTracks[index], context, cubit, index);
                       },
                       itemCount: cubit.mainScreenTracks.length,
                     ),
@@ -127,10 +127,12 @@ class TracksScreen extends StatelessWidget {
     );
   }
 
-  Widget buildTrack(TrackDataPlayback track, context, cubit) {
+  Widget buildTrack(TrackDataPlayback track, context, cubit, index) {
     return InkWell(
       onTap: () {
         cubit.nowPlaying = track;
+        cubit.trackList = cubit.mainScreenTracks;
+        cubit.playlistIndex = index;
         navigateTo(context, const PlaybackScreen());
       },
       child: Row(
@@ -161,6 +163,8 @@ class TracksScreen extends StatelessWidget {
             child: IconButton(
               onPressed: () {
                 cubit.nowPlaying = track;
+                cubit.trackList = cubit.mainScreenTracks;
+                cubit.playlistIndex = index;
                 navigateTo(context, const PlaybackScreen());
               },
               icon: const Icon(Icons.play_arrow),

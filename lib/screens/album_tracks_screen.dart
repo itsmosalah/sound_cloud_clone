@@ -32,6 +32,8 @@ class AlbumTracksScreen extends StatelessWidget {
                 return InkWell(
                   onTap:  ()  {
                     cubit.nowPlaying = cubit.currentAlbum.trackList[index];
+                    cubit.trackList = cubit.currentAlbum.trackList;
+                    cubit.playlistIndex = index;
                     navigateTo(context, PlaybackScreen());
                   },
                   child: Padding(
@@ -76,6 +78,8 @@ class AlbumTracksScreen extends StatelessWidget {
                           child: IconButton(
                             onPressed:  ()  {
                               cubit.nowPlaying = cubit.currentAlbum.trackList[index];
+                              cubit.trackList = cubit.currentAlbum.trackList;
+                              cubit.playlistIndex = index;
                               navigateTo(context, PlaybackScreen());
                             },
                             icon: Icon(Icons.play_arrow),

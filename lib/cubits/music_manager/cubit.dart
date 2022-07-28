@@ -21,7 +21,8 @@ class MusicManagerCubit extends Cubit<MusicManagerStates> {
 
   static MusicManagerCubit get(context) => BlocProvider.of(context);
 
-  List<TrackDataPreview> trackList = [];
+  List<TrackDataPlayback> trackList = [];
+  int playlistIndex = 0;
 
   TrackDataPlayback nowPlaying = TrackDataPlayback();
 
