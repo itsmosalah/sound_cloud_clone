@@ -19,9 +19,9 @@ class BottomNavCubit extends Cubit<BottomNavStates>
 
   List<Widget> bottomNavScreens=
   [
-    TracksScreen(),
-    PlayListsScreen(),
-    SettingsScreen()
+    const TracksScreen(),
+    const PlayListsScreen(),
+    const SettingsScreen()
   ];
 
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
@@ -21,28 +22,23 @@ class MusicManagerCubit extends Cubit<MusicManagerStates> {
 
   static MusicManagerCubit get(context) => BlocProvider.of(context);
 
+  //the track list that is currently active (album, playlist... etc)
   List<TrackDataPlayback> trackList = [];
+  //index of currently played track within the track list
   int playlistIndex = 0;
-
+  //the track that is currently being played
   TrackDataPlayback nowPlaying = TrackDataPlayback();
-
+  //boolean to indicate whether the playlist has been loaded and ready to be played
   bool playlistsLoaded = false;
 
+  //function to use the API to get the track data and set it using the ID
   Future<void> getTrack(String id) async {
     emit(SoundCloudMusicManagerLoadingState());
-    /*SoundAPI.getTrackAPI(id).then((value) {
-      nowPlaying = value;
-      gotTheTrack = true;
-      print("ID VAL = " + value.id);
-      emit(SoundCloudGetTrackSuccessState());
-    });*/
     nowPlaying = await SoundAPI.getTrackAPI(id);
     emit(SoundCloudGetTrackSuccessState());
   }
 
-
-//going to add more fields for handling local music file handling
-
+  //function that validates the new playlist name and creates the playlist if valid
   void createPlaylist(String name) {
     for (Playlist lst in userPlaylists) {
       if (name == lst.name) {
@@ -52,13 +48,13 @@ class MusicManagerCubit extends Cubit<MusicManagerStates> {
     }
     userPlaylists.add(Playlist(name: name));
     emit(SoundCloudAddPlaylistSuccessState());
-    updatePlaylists();
+    updatePlaylists(); //updates the user playlists changes in database
   }
 
   List<Playlist> userPlaylists = [];
 
+  //load playlists from data base into the cubit field: userPlaylists
   void loadPlayLists() {
-
     FirebaseFirestore.instance.collection('users').doc(loggedUserID).get().then(
       (DocumentSnapshot doc) {
         final data = doc.data() as Map<String, dynamic>;
@@ -70,30 +66,19 @@ class MusicManagerCubit extends Cubit<MusicManagerStates> {
         emit(SoundCloudPlaylistsLoadedSuccessState());
       },
       onError: (e) {
-        print("Error getting playlists $e");
-        // emit(SoundCloudPlaylistsLoadedErrorState());
+        if (kDebugMode) {
+          print("Error getting playlists $e");
+        }
       },
     );
-
-/*
-    //this should load the playlists from the firebase / logged user cubit
-    //load playlists in a list of map where each map corresponds to a playlist
-
-    //this should be the ONE OF THE json we receive after decoding it
-    //a json containing a single playlist
-    String jsonStr = "{\"name\":\"myplaylist\",\"no_of_tracks\":2,\"tracks\":[{\"album\":{\"album_type\":\"album\",\"artists\":[{\"external_urls\":{\"spotify\":\"https://open.spotify.com/artist/2zwHaEmXxX6DTv4i8ajNCM\"},\"id\":\"2zwHaEmXxX6DTv4i8ajNCM\",\"name\":\"KrisAllen\",\"type\":\"artist\",\"uri\":\"spotify:artist:2zwHaEmXxX6DTv4i8ajNCM\"}],\"external_urls\":{\"spotify\":\"https://open.spotify.com/album/4K3AXbUoyTVE4A6wV50cmB\"},\"id\":\"4K3AXbUoyTVE4A6wV50cmB\",\"images\":[{\"height\":640,\"url\":\"https://i.scdn.co/image/ab67616d0000b2735f3afe4cafb7a274497341b3\",\"width\":640},{\"height\":300,\"url\":\"https://i.scdn.co/image/ab67616d00001e025f3afe4cafb7a274497341b3\",\"width\":300},{\"height\":64,\"url\":\"https://i.scdn.co/image/ab67616d000048515f3afe4cafb7a274497341b3\",\"width\":64}],\"name\":\"Horizons\",\"release_date\":\"2014-08-12\",\"release_date_precision\":\"day\",\"total_tracks\":10,\"type\":\"album\",\"uri\":\"spotify:album:4K3AXbUoyTVE4A6wV50cmB\"},\"artists\":[{\"external_urls\":{\"spotify\":\"https://open.spotify.com/artist/2zwHaEmXxX6DTv4i8ajNCM\"},\"id\":\"2zwHaEmXxX6DTv4i8ajNCM\",\"name\":\"KrisAllen\",\"type\":\"artist\",\"uri\":\"spotify:artist:2zwHaEmXxX6DTv4i8ajNCM\"}],\"disc_number\":1,\"duration_ms\":198386,\"explicit\":false,\"external_ids\":{\"isrc\":\"QMF921450124\"},\"external_urls\":{\"spotify\":\"https://open.spotify.com/track/3nBmy2hAqIDmMOD0VZGB7I\"},\"id\":\"3nBmy2hAqIDmMOD0VZGB7I\",\"is_local\":false,\"is_playable\":true,\"name\":\"Lost\",\"popularity\":45,\"preview_url\":\"https://p.scdn.co/mp3-preview/6574de68d560b54a86d76b56ea5a414241627106?cid=f6a40776580943a7bc5173125a1e8832\",\"track_number\":5,\"type\":\"track\",\"uri\":\"spotify:track:3nBmy2hAqIDmMOD0VZGB7I\"},{\"album\":{\"album_type\":\"album\",\"artists\":[{\"external_urls\":{\"spotify\":\"https://open.spotify.com/artist/2zwHaEmXxX6DTv4i8ajNCM\"},\"id\":\"2zwHaEmXxX6DTv4i8ajNCM\",\"name\":\"KrisAllen\",\"type\":\"artist\",\"uri\":\"spotify:artist:2zwHaEmXxX6DTv4i8ajNCM\"}],\"external_urls\":{\"spotify\":\"https://open.spotify.com/album/4K3AXbUoyTVE4A6wV50cmB\"},\"id\":\"4K3AXbUoyTVE4A6wV50cmB\",\"images\":[{\"height\":640,\"url\":\"https://i.scdn.co/image/ab67616d0000b2735f3afe4cafb7a274497341b3\",\"width\":640},{\"height\":300,\"url\":\"https://i.scdn.co/image/ab67616d00001e025f3afe4cafb7a274497341b3\",\"width\":300},{\"height\":64,\"url\":\"https://i.scdn.co/image/ab67616d000048515f3afe4cafb7a274497341b3\",\"width\":64}],\"name\":\"Horizons\",\"release_date\":\"2014-08-12\",\"release_date_precision\":\"day\",\"total_tracks\":10,\"type\":\"album\",\"uri\":\"spotify:album:4K3AXbUoyTVE4A6wV50cmB\"},\"artists\":[{\"external_urls\":{\"spotify\":\"https://open.spotify.com/artist/2zwHaEmXxX6DTv4i8ajNCM\"},\"id\":\"2zwHaEmXxX6DTv4i8ajNCM\",\"name\":\"KrisAllen\",\"type\":\"artist\",\"uri\":\"spotify:artist:2zwHaEmXxX6DTv4i8ajNCM\"}],\"disc_number\":1,\"duration_ms\":198386,\"explicit\":false,\"external_ids\":{\"isrc\":\"QMF921450124\"},\"external_urls\":{\"spotify\":\"https://open.spotify.com/track/3nBmy2hAqIDmMOD0VZGB7I\"},\"id\":\"3nBmy2hAqIDmMOD0VZGB7I\",\"is_local\":false,\"is_playable\":true,\"name\":\"Lost\",\"popularity\":45,\"preview_url\":\"https://p.scdn.co/mp3-preview/6574de68d560b54a86d76b56ea5a414241627106?cid=f6a40776580943a7bc5173125a1e8832\",\"track_number\":5,\"type\":\"track\",\"uri\":\"spotify:track:3nBmy2hAqIDmMOD0VZGB7I\"}]}";
-
-    Map<String,dynamic> data = jsonDecode(jsonStr);
-    userPlaylists.add(Playlist.fromJson(data));*/
   }
 
-  //this should have access to ID of CURRENTLY LOGGED USER
+  //function to update the user playlists in database after every addition/removal
   void updatePlaylists() {
     List<Map<String, dynamic>> sendJson = [];
     for (Playlist pl in userPlaylists) {
       sendJson.add(pl.toJson());
     }
-
     FirebaseFirestore.instance.collection('users').doc(loggedUserID).update({
       'playlists': sendJson,
     }).then((value) {
@@ -103,11 +88,11 @@ class MusicManagerCubit extends Cubit<MusicManagerStates> {
     });
   }
 
-  AlbumData currentAlbum = AlbumData();
-  void setAlbum(AlbumData x) {
-    currentAlbum = x;
-  }
 
+  AlbumData currentAlbum = AlbumData();
+  void setAlbum(AlbumData album) {
+    currentAlbum = album;
+  }
 
   //get albums by search. which still has not been developed in UI of this version
   AlbumData getAlbum(String id) {
@@ -118,32 +103,42 @@ class MusicManagerCubit extends Cubit<MusicManagerStates> {
     return x;
   }
 
+  //object carrying the search results, contains the tracks for now
+  //used by the search page to display the content
+  /// in a later update, it may include other fields like albums and artists
   SearchResults searchResults = SearchResults();
+
+  //function that gets the search response from API and initializes the searchResults object
   void setSearchResults(String searchQuery) {
     SoundAPI.getSearchResults(searchQuery).then((value) {
       searchResults = SearchResults.fromJson(value);
       emit(SoundCloudSearchSuccessState());
       },
       onError: (e){
-        print('Search error : $e');
+        if (kDebugMode) {
+          print('Search error : $e');
+        }
         emit(SoundCloudSearchErrorState());
       }
     );
-
   }
 
+  //boolean to indicate main screen content
   bool mainScreenContentLoaded = false;
+  //list of albums displayed on the main screen
   List<AlbumData> mainScreenAlbums = [];
+  //list of tracks displayed on the main screen
   List<TrackDataPlayback> mainScreenTracks = [];
-  void loadMainScreenContent (){
 
+  void loadMainScreenContent (){
+    //to avoid loading them more than once
     if(mainScreenContentLoaded)
       {
         return;
       }
     mainScreenContentLoaded = true;
 
-
+    //getting the default main screen content that is set in the database for all users
     FirebaseFirestore.instance.collection('preloaded_albums')
         .doc('albums').get().then(
           (DocumentSnapshot doc) {
@@ -158,40 +153,12 @@ class MusicManagerCubit extends Cubit<MusicManagerStates> {
         //emit(SoundCloudPlaylistsLoadedSuccessState());
       },
       onError: (e) {
-        print("Error getting playlists $e");
+        if (kDebugMode) {
+          print("Error getting playlists $e");
+        }
         // emit(SoundCloudPlaylistsLoadedErrorState());
         emit(SoundCloudMainScreenErrorState());
       },
     );
-
-    /*var random = Random();
-    int n = mainScreenTracks.length;
-    for (int i = 0; i < n/2; i++){
-      int idx1 = i;
-      int idx2 = n - idx1 - 1;
-
-      var tmp = mainScreenTracks[idx1];
-      mainScreenTracks[idx1] = mainScreenTracks[idx2];
-      mainScreenTracks[idx2] = tmp;
-    }*/
-
-    /*int n = mainScreenTracks.length;
-    print(mainScreenTracks[0].name);
-    print(mainScreenTracks[n-1].name);
-
-    var tmp = mainScreenTracks[0];
-    mainScreenTracks[0] = mainScreenTracks[n-1];
-    mainScreenTracks[n-1] = tmp;
-    print("bos bos el 7arka de");
-
-    print(mainScreenTracks[0].name);
-    print(mainScreenTracks[n-1].name);
-
-    print("el mafroood SHUFFLEDDDD");
-    mainScreenTracks.shuffle();*/
-
-
   }
-
-
 }

@@ -8,6 +8,7 @@ class Playlist {
 
   Playlist({required this.name});
 
+  //given json, initialize the playlist fields
   Playlist.fromJson(Map<String,dynamic>json){
     size = json['no_of_tracks'];
     name = json['name'];
@@ -16,11 +17,14 @@ class Playlist {
     }
   }
 
+  //create a json with the data of each track in a list of JSON's
   Map<String,dynamic> toJson(){
     List<Map<String,dynamic>>tracksJson = [];
+
     for (TrackDataPlayback track in trackList){
       tracksJson.add(track.toJson());
     }
+
     return {
       "name" : name,
       "no_of_tracks" : size,

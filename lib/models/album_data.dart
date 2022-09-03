@@ -6,8 +6,6 @@ class AlbumData {
   int size = 0;
   String image640URL = "", image300URL = "", image64URL = "", releaseDate = "";
 
-
-  //recieved json["albums"][0]
   AlbumData.fromJson(Map<String, dynamic> json){
     id = json["id"];
     name = json["name"];
@@ -28,9 +26,9 @@ class AlbumData {
   Map<String,dynamic> toJson(){
 
     List<Map<String,dynamic>> tracks = [];
-    trackList.forEach((element) {
+    for (var element in trackList) {
       tracks.add(element.toJson());
-    });
+    }
 
     return {
       "id" : id,

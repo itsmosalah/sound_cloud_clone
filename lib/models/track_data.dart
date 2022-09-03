@@ -6,6 +6,14 @@ abstract class TrackData {
 
 }
 
+/*
+  as the json for tracks retrieved from searchQuery is different
+  from the json received from getTrack for the currently used API
+
+  we made them into two separate classes.
+ */
+
+//track data only for preview. used in displaying search results
 class TrackDataPreview extends TrackData {
   TrackDataPreview.fromJson(Map <String, dynamic> json){
     id = json["id"];
@@ -18,6 +26,7 @@ class TrackDataPreview extends TrackData {
   }
 }
 
+//track data that is available to be played (includes a URL)
 class TrackDataPlayback extends TrackData {
   String previewURL = "";
   TrackDataPlayback.fromJson(Map <String, dynamic> json, {int? index = 0}){
@@ -63,9 +72,9 @@ class TrackDataPlayback extends TrackData {
 
 }
 
-
+// given json for the track list retrieved from albums, returns a list of track objects
 List<TrackDataPreview> getTrackList (Map<String,dynamic>json){
-  var jsonList = json["tracks"]["items"];
+  final jsonList = json["tracks"]["items"];
 
   List<TrackDataPreview> trackList = [];
 

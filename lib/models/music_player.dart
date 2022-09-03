@@ -5,34 +5,16 @@ import 'package:just_audio/just_audio.dart';
 class MusicPlayer {
   bool isPlaying = false;
   bool urlSrcSet = false;
-  String? urlSrc;
-  var _audioPlayer;
+  String urlSrc = "";
+  final _audioPlayer = AudioPlayer();
 
   MusicPlayer(){
     isPlaying = urlSrcSet = false;
-    _audioPlayer = AudioPlayer();
   }
-
 
   void setUrlSrc (String s) async {
     urlSrc = s;
     urlSrcSet = true;
     await _audioPlayer.setUrl(urlSrc);
   }
-
-  void play() async {
-    if (!isPlaying && urlSrcSet){
-      //use the play method
-      await _audioPlayer.play();
-      isPlaying = true;
-    }
-  }
-
-  void pause() async {
-    //use the pause method
-
-    isPlaying = false;
-  }
-
-  //going to add more fields for handling local music file handling
 }

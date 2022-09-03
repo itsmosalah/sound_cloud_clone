@@ -16,44 +16,47 @@ class MusicPlaybackCubit extends Cubit<MusicPlaybackStates> {
   static MusicPlaybackCubit get(context) => BlocProvider.of(context);
 
 
-  ///PLAYLIST MODE - TESTING
-
-  //set active playlist
-  //set index of current track in active
+  //the playlist that is currently active for playback
   List<TrackDataPlayback> activePlaylist = [];
+  //index for the active track in the active playlist
   int playlistIndex = 0;
 
+  //setting the active playlist and the index of the currently playing track
   void setActivePlaylist (List <TrackDataPlayback> lst, int curIndex){
     activePlaylist = lst;
     playlistIndex = curIndex;
   }
 
-  //next track
+  // go to the next track
   void nextTrack(){
+    //if this is the last track, go to the first track
     if (playlistIndex == activePlaylist.length - 1){
       playlistIndex = 0;
     }
-    else {
+    //else go to the next track
+    else
+    {
       playlistIndex++;
     }
 
     setActiveTrack(activePlaylist[playlistIndex]);
     emit(MusicPlaybackPlaylistNavigationState());
-
+    //play the track
     togglePlayer();
   }
 
-  //previous track
   void previousTrack(){
+    //if this is the first track, go to the last
     if (playlistIndex == 0){
       playlistIndex = activePlaylist.length - 1;
     }
     else {
+      //else go to the previous one on the list
       playlistIndex--;
     }
     setActiveTrack(activePlaylist[playlistIndex]);
     emit(MusicPlaybackPlaylistNavigationState());
-
+    //play the track
     togglePlayer();
   }
 

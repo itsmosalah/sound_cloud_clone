@@ -1,21 +1,24 @@
 import 'dart:convert';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:dio/dio.dart';
 import 'package:sound_cloud_clone/models/album_data.dart';
 import '../../../models/track_data.dart';
 
 class SoundAPI {
 
+  //initializing the API request header values.
+  //retrieving the API key from the environment variables
   static Map<String,dynamic> headerValues = {
-    'X-RapidAPI-Key' : "ecd058c83cmsh153109f65a006a2p18cbd8jsn937e9f50b68e",
+    'X-RapidAPI-Key' : dotenv.env['API_KEY'],
     'X-RapidAPI-Host': 'spotify23.p.rapidapi.com',
   };
 
-  static Dio _dio = Dio();
+  static final Dio _dio = Dio();
 
-
-  static Future<String> getResponse(String endpoint_params) async {
-    String url = "https://spotify23.p.rapidapi.com/$endpoint_params";
+  //function that takes the endpoint parameters (search by search key, tracks by id.. etc)
+  //and returns the response
+  static Future<String> getResponse(String endpointParams) async {
+    String url = "https://spotify23.p.rapidapi.com/$endpointParams";
     Response res = await _dio.get(
       url,
       options: Options(
@@ -23,31 +26,36 @@ class SoundAPI {
         responseType: ResponseType.plain,
       ),
     );
-
     return res.data.toString();
   }
 
+  //get the track data from API using the given track ID
   static Future<TrackDataPlayback> getTrackAPI(String trackID) async {
-
 
     String getTrackResponse = await getResponse("tracks/?ids=$trackID");
 
     Map<String,dynamic> data = await json.decode(getTrackResponse);
 
-
     return TrackDataPlayback.fromJson(data);
   }
 
 
+  //get search results given the search string. with fixed query parameters
   static Future<Map<String,dynamic>> getSearchResults(String searchQuery) async {
 
-    String responseSearch = await getResponse("search/?q=%3C$searchQuery%3E&type=multi&offset=0&limit=10&numberOfTopResults=7");
+    int numberOfResults = 7, offset = 0, limit = 10;
+    String type = 'multi';
+
+    String responseSearch =
+      await getResponse("search/?q=%3C$searchQuery%3E&type=$type&offset=$offset&limit=$limit&numberOfTopResults=$numberOfResults");
 
     Map<String,dynamic> data = await json.decode(responseSearch);
 
     return data;
   }
 
+  //function to get the album by ID.
+  /// this option is currently not developed in the rest of the application
   static Future<AlbumData> getAlbumAPI(String id) async {
     String getAlbumResponse = await getResponse("albums/?ids=$id");
 

@@ -6,6 +6,7 @@ class ThemeManagerCubit extends Cubit<ThemeManagerStates> {
 
   static ThemeManagerCubit get(context)=>BlocProvider.of(context);
 
+  //dark theme control
   bool isDark = false;
   void changeTheme()
   {

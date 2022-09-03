@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:page_transition/page_transition.dart';
@@ -50,20 +49,20 @@ Widget defaultTextField({
       enabledBorder: enableBorder
           ? OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: Colors.black, width: 1),
+              borderSide: const BorderSide(color: Colors.black, width: 1),
             )
           : OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: Colors.white, width: 10),
+              borderSide: const BorderSide(color: Colors.white, width: 10),
             ),
       focusedBorder: enableBorder
           ? OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: Colors.black, width: 1),
+              borderSide: const BorderSide(color: Colors.black, width: 1),
             )
           : OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: Colors.white, width: 10),
+              borderSide: const BorderSide(color: Colors.white, width: 10),
             ),
       prefixIcon: prefixIcon,
       suffixIcon: IconButton(
@@ -185,13 +184,13 @@ Widget trackTile(TrackData trackData) {
 }
 
 Widget buildSettingsItem(SettingsModel model, context) => Container(
-    margin: EdgeInsets.symmetric(horizontal: 35, vertical: 20),
+    margin: const EdgeInsets.symmetric(horizontal: 35, vertical: 20),
     width: 340,
     height: 60,
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(23),
-      boxShadow: [
+      boxShadow: const [
         BoxShadow(color: defaultColor, offset: Offset(3, 3), blurRadius: 6)
       ],
     ),
@@ -200,10 +199,11 @@ Widget buildSettingsItem(SettingsModel model, context) => Container(
       child: InkWell(
         onTap: () {
           if (model.darkMode!) return;
-          if (!model.signOut!)
+          if (!model.signOut!) {
             navigateTo(context, model.screen);
-          else
-            navigateAndFinish(context, LoginScreen());
+          } else {
+            navigateAndFinish(context, const LoginScreen());
+          }
         },
         child: Row(
           children: [
@@ -216,12 +216,12 @@ Widget buildSettingsItem(SettingsModel model, context) => Container(
                 color: defaultColor,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 20,
             ),
             defaultText(
                 text: model.text!, textColor: Colors.black, fontSize: 16),
-            Spacer(),
+            const Spacer(),
             if (!model.darkMode!)
               Icon(
                 Icons.arrow_forward_ios,
@@ -267,7 +267,7 @@ Future myDialog(
           return AlertDialog(
               title: Text(
                 text,
-                style: TextStyle(fontSize: 17),
+                style: const TextStyle(fontSize: 17),
               ),
               content: isItListView
                   ? content
@@ -275,15 +275,15 @@ Future myDialog(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          child: TextButton(
-                              onPressed: declineFn,
-                              child: defaultText(
-                                  text: declineText, textColor: Colors.white)),
                           width: 80,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             color: defaultColor,
                           ),
+                          child: TextButton(
+                              onPressed: declineFn,
+                              child: defaultText(
+                                  text: declineText, textColor: Colors.white)),
                         ),
                         Container(
                           width: 80,
@@ -308,11 +308,11 @@ Widget myPanel({required Widget Screen, required BuildContext context, required 
         // cubit.stillPlaying = true;
         cubit.navigatePanel();
         Navigator.push(context, PageTransition(
-            child: PlaybackScreen(),
+            child: const PlaybackScreen(),
             type: PageTransitionType.bottomToTop));
       },
       child: Container(
-          padding: EdgeInsets.fromLTRB(20, 6, 20, 10),
+          padding: const EdgeInsets.fromLTRB(20, 6, 20, 10),
           color: ThemeManagerCubit
               .get(context)
               .isDark
@@ -323,13 +323,13 @@ Widget myPanel({required Widget Screen, required BuildContext context, required 
               Image(
                 image: NetworkImage(cubit.activeTrack.image64URL),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
+                  SizedBox(
                     width: 200,
                     child: defaultText(
 
@@ -341,10 +341,10 @@ Widget myPanel({required Widget Screen, required BuildContext context, required 
                         textOverflow: TextOverflow.ellipsis
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
-                  Container(
+                  SizedBox(
                     width: 150,
                     child: defaultText(
                         text: cubit.activeTrack.artistName,
@@ -357,7 +357,7 @@ Widget myPanel({required Widget Screen, required BuildContext context, required 
                   ),
                 ],
               ),
-              Spacer(),
+              const Spacer(),
               CircleAvatar(
                 backgroundColor: defaultColor,
                 child: IconButton(
